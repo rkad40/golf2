@@ -1,0 +1,74 @@
+[
+    {
+        "award_type": "Closest to the Hole : Hole #3",
+        "created_on": "2021-08-14 18:41:55.672297",
+        "id": 1,
+        "is_best": 0,
+        "player": "Shawn Altum",
+        "team_id": 155
+    },
+    {
+        "award_type": "Closest to the Hole : Hole #3",
+        "created_on": "2021-08-14 18:43:29.768392",
+        "id": 2,
+        "is_best": 1,
+        "player": "Kenny Hoffman",
+        "team_id": 154
+    },
+    {
+        "award_type": "Closest to the Hole : Hole #5",
+        "created_on": "2021-08-14 18:53:28.955030",
+        "id": 3,
+        "is_best": 0,
+        "player": "Robyn Hoffman",
+        "team_id": 154
+    },
+    {
+        "award_type": "Closest to the Hole : Hole #5",
+        "created_on": "2021-08-14 20:00:41.906504",
+        "id": 4,
+        "is_best": 0,
+        "player": "John Altum",
+        "team_id": 155
+    },
+    {
+        "award_type": "Closest to the Hole : Hole #5",
+        "created_on": "2021-08-14 20:16:01.877595",
+        "id": 5,
+        "is_best": 0,
+        "player": "Wyatt Smith",
+        "team_id": 157
+    },
+    {
+        "award_type": "Closest to the Hole : Hole #15",
+        "created_on": "2021-08-16 02:42:14.041764",
+        "id": 6,
+        "is_best": 0,
+        "player": "Peter Shock",
+        "team_id": 163
+    },
+    {
+        "award_type": "Closest to the Hole : Hole #15",
+        "created_on": "2021-08-16 02:44:41.820323",
+        "id": 7,
+        "is_best": 0,
+        "player": "Gregg Muehr",
+        "team_id": 158
+    },
+    {
+        "award_type": "Closest to the Hole : Hole #15",
+        "created_on": "2021-08-16 03:12:14.632622",
+        "id": 8,
+        "is_best": 1,
+        "player": "Jon Bartsch",
+        "team_id": 168
+    },
+    {
+        "award_type": "Closest to the Hole : Hole #5",
+        "created_on": "2021-08-21 05:34:50.862622",
+        "id": 10,
+        "is_best": 1,
+        "player": "Christopher Goertz",
+        "team_id": 159
+    }
+]

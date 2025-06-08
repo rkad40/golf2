@@ -1,0 +1,14 @@
+[
+    {
+        "active": 1,
+        "course_id": 1,
+        "date_time": "2021-08-28 13:00:00",
+        "enable_team_access": 1,
+        "enable_team_input": 1,
+        "id": 1,
+        "name": "Rockne Invitational",
+        "play_from": "white",
+        "show_leader_board": 1,
+        "show_results": 1
+    }
+]

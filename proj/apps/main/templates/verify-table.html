@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load assets %}
+{% load crispy_forms_tags %}
+
+{% block head-css-link %}
+<!-- Include Tabulator sytlesheet link -->
+<link href="https://unpkg.com/tabulator-tables@4.9.3/dist/css/tabulator.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block head-script-link %}
+<!-- Include Tabulator JavaScript module -->
+<script type="text/javascript" src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.min.js"></script>
+{% endblock %}
+
+{% block head-script %}
+<script>
+</script>
+{% endblock %}
+
+{% block head-styles %}
+<!-- Define global Tabulator styles -->
+<style>
+#data-table * {
+font-size: 14px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="data-table" style="font-size: 12px;"></div>
+<div style="height: 10px;"></div>
+<form id="data-table-form" method="post" action="" enctype="multipart/form-data">
+	{% csrf_token %}
+    {{ form|crispy }}
+</form>
+<div style="height: 15px;"></div>
+<a class="btn btn-primary" href="javascript:saveButtonClicked();"><i class="fas fa-save"></i> Save</a>
+<div style="height: 25px;"></div>
+{% endblock %}
+
+{% block post-script %}
+<script>
+function saveButtonClicked() {
+	let data = table.getData();
+	let jsonDataText = JSON.stringify(data);
+	$('#id_data').val(jsonDataText);
+	$('#id_data_type').val('json');
+	$('#data-table-form').submit();
+};
+function cellEdited(cell) {
+	// console.log(cell.getData().id);
+};
+let tableColumns = [
+	{% for column in columns %}{{ column|json|safe }},
+	{% endfor %}
+];
+for (let column of tableColumns) {
+	column.cellEdited = cellEdited;
+}
+var table = new Tabulator("#data-table", {
+    height: "500px",
+    columns: tableColumns,
+	data: {{ table_data|json|safe }},
+});
+</script>
+{% endblock %}

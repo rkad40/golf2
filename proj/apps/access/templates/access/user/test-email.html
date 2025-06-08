@@ -1,0 +1,9 @@
+{% autoescape off %}
+This is a test email.  This is only a test.  If this would have been an actual email, it would have said something other than this.  This email was sent at {{ date }}.
+
+While we are here though, here is the quote of the day:
+
+{{ quote.quote|safe }}
+
+{{ quote.author|safe }}
+{% endautoescape %}

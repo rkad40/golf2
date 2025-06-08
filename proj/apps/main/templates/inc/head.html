@@ -1,0 +1,40 @@
+{% load static %}
+{% load assets %}
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Rockne Invitational Golf Tournament</title>
+<meta content="" name="description">
+<meta content="" name="keywords">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+<link href="{% static 'site/img/favicon.png' %}" rel="icon">
+<link href="{% static 'site/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+<link href="{% static 'site/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+<link href="{% static 'site/vendor/icofont/icofont.min.css' %}" rel="stylesheet">
+<link href="{% static 'site/vendor/aos/aos.css' %}" rel="stylesheet">
+<link href="{% static 'site/vendor/dialog/dialog.css' %}" rel="stylesheet">
+<link href="{% static 'site/vendor/imgbutton/imgbutton.css' %}" rel="stylesheet">
+<link href="{% static 'site/vendor/flatpickr/flatpickr_material_blue.css' %}" rel="stylesheet">
+<link href="{% static_reload 'site/css/site.css' %}" rel="stylesheet">
+<link href="{% static_reload 'maven/maven-charcoal.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'site/vendor/owl.carousel/assets/owl.carousel.min.css' %}">
+<link rel="stylesheet" href="{% static 'site/vendor/owl.carousel/assets/owl.theme.default.min.css' %}">
+{% block head-css-link %}{% endblock %}
+<script>"use strict"; var IS_ADMIN = false;</script>
+<script>var SITE_DEBUG = {% site_debug %};</script>
+<script>var HTTP_STATIC_URL = "{% http_static_url %}";</script>
+<script>var HTTP_MEDIA_URL = "{% http_media_url %}";</script>
+<script src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+<script src="{% static 'site/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'site/vendor/jquery.easing/jquery.easing.min.js' %}"></script>
+<script src="{% static 'site/vendor/jquery.timeago/jquery.timeago.js' %}"></script>
+<script src="{% static 'site/vendor/jquery.waypoints/jquery.waypoints.js' %}"></script>
+<script src="{% static 'site/vendor/aos/aos.js' %}"></script>
+<script src="{% static 'site/vendor/fontawesome/all.js' %}"></script>
+<script src="{% static 'site/vendor/moment/moment.min.js' %}"></script>
+<script src="{% static_reload 'site/vendor/imgbutton/imgbutton.js' %}"></script>
+<script src="{% static_reload 'site/vendor/dialog/dialog.js' %}"></script>
+<script src="{% static 'site/vendor/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static_reload 'site/js/site.js' %}"></script>
+<!-- <script src="{% static_reload 'maven/maven-1.2.js' %}"></script> -->
+<script src="{% static 'site/vendor/owl.carousel/owl.carousel.min.js' %}"></script>
+{% block head-styles %}{% endblock %}

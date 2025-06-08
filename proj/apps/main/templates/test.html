@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head></head>
+<body>
+<script>
+
+	var TeamInfo = {
+		StartHole: 1,
+		Score:
+		{
+			 1: {RawScore: 0, RelScore:  "", Valid: 1},
+			 2: {RawScore: 0, RelScore:  "", Valid: 1},
+			 3: {RawScore: 0, RelScore:  "", Valid: 1},
+			 4: {RawScore: 0, RelScore:  "", Valid: 1},
+			 5: {RawScore: 0, RelScore:  "", Valid: 0},
+			 6: {RawScore: 0, RelScore:  "", Valid: 0},
+			 7: {RawScore: 0, RelScore:  "", Valid: 0},
+			 8: {RawScore: 0, RelScore:  "", Valid: 0},
+			 9: {RawScore: 0, RelScore:  "", Valid: 0},
+			10: {RawScore: 0, RelScore:  "", Valid: 0}, 
+			11: {RawScore: 0, RelScore:  "", Valid: 0},
+			12: {RawScore: 0, RelScore:  "", Valid: 0}, 
+			13: {RawScore: 0, RelScore:  "", Valid: 0},
+			14: {RawScore: 0, RelScore:  "", Valid: 0},
+			15: {RawScore: 0, RelScore:  "", Valid: 0},
+			16: {RawScore: 0, RelScore:  "", Valid: 1},
+			17: {RawScore: 0, RelScore:  "", Valid: 1},
+			18: {RawScore: 0, RelScore:  "", Valid: 1},
+		},
+	};
+
+					let holesPlayed = 0;
+                    let lastHole = 0;
+                    let currentHole = 1;
+					for (let i = 1; i <= 18; i++) {
+						if (TeamInfo.Score[i].Valid) {
+                            lastHole = i;
+							holesPlayed++;
+						}
+					}
+                    if ((holesPlayed > 0) && (holesPlayed < 18) && (lastHole == 18)) {
+                        for (let i = 1; i <= 18; i++) {
+                            if (TeamInfo.Score[i].Valid) {
+                                lastHole = i;
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                    if ((holesPlayed != 0) && (holesPlayed != 18)) {
+                        currentHole = lastHole + 1;
+                        if (currentHole > 18) {
+                            currentHole = 1;
+                        }
+                    }
+
+    console.log(currentHole);
+
+
+</script>
+</body>
+</html>
+
+

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+{% load assets %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<form id="admin-actions-form" method="post" action="" enctype="multipart/form-data">
+{% csrf_token %}
+{{ form|crispy }}
+<div style="height: 15px;"></div>
+<button class="btn btn-primary" type="submit"><i class="fas fa-{{ icon }}"></i> {{ button }}</button>
+<div style="height: 25px;"></div>
+</form>
+{% endblock %}
+

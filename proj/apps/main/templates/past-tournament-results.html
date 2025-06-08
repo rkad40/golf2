@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% load static %}
+{% load assets %}
+{% load crispy_forms_tags %}
+
+{% block head-css-link %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.2.1/Chart.bundle.js"></script>
+{% endblock %}
+
+{% block head-styles %}
+<style>
+table.results * {
+    font-size: 18px;
+    line-height: 20px;
+    padding: 5px;
+    border-collapse: collapse;
+    border: 1px solid #FFF;
+}
+table.results {
+    border: 1px solid #999;
+    border-collapse: collapse;
+}
+table.results th {
+	background-color: #777;
+}
+table.results td {
+}
+table.results th, table.results td {
+    border: 1px solid #999;
+    vertical-align: top;
+}
+.strike {
+    text-decoration: line-through;
+}
+
+@media only screen and (max-width: 600px) {
+#ContentContainer {
+    padding: 0 3px;
+}
+.rank-column {
+    width: 40px !important;
+}
+.team-column {
+    width: 40px !important;
+}
+table.results * {
+    font-size: 12px;
+    line-height: 14px;
+    width: 100%;
+    padding: 0;
+}
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<form id="form" method="post" action="" enctype="multipart/form-data">
+{% csrf_token %}
+{{ form|crispy }}
+<div style="height: 1px;"></div>
+<button class="btn btn-primary" type="submit"><i class="fas fa-check"></i> Show</button>
+<div style="height: 25px;"></div>
+</form>
+{% if teams %}
+<h3>{{ tournament }}</h3>
+<table class="table table-hover results">
+    <thead>
+    <tr class="table-dark" style="background-color: #aaa; color: #fff; text-shadow: 2px 2px 2px #555;">
+        <th class="rank-column" style="text-align: center;">Rank</th>
+        <th class="team-column" style="text-align: center;">Team</th>
+        <th style="text-align: left;">Players</th>
+        <th style="text-align: center;">Raw<br>Score</th>
+        <th style="text-align: center;">Hdcp</th>
+        <th style="text-align: center;">Adj<br>Score</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for team in teams %}
+    <tr>
+        <td class="rank-column" style="text-align: center;">{{ forloop.counter }}</td>
+        <td class="team-column" style="text-align: center;">{{ team.name }}</td>
+        <td style="text-align: left;">{{ team.player1 }}<br>{{ team.player2 }}<br>{{ team.player3 }}</td>
+        <td style="text-align: center;">{{ team.current_raw_score }}</td>
+        <td style="text-align: center;">{{ team.handicap|plusminus }}</td>
+        <td style="text-align: center;">{{ team.final_adj_raw_score }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<h3>Chart</h3>
+<div>
+  <canvas id="results-chart"></canvas>
+</div>
+<div class="alert alert-secondary" role="alert">
+<div style="font-size: 14px; line-height: 14px;">HINT: If you are viewing with a mobile device, the chart renders better if you turn your phone sideways.</div>
+</div>
+
+{% if tournament.archive_notes %}
+<h3>Notes</h3>
+{{ tournament.archive_notes|safe }}
+{% endif %}
+{% endif %}
+{% endblock %}
+
+{% block post-script %}
+{% if teams %}
+<script>
+const data = {
+  labels: [
+	{% for team in teams %}'{{ team.name }}',{% endfor %}
+  ],
+  datasets: [
+    {
+      label: 'Adj',
+      data: [{% for team in teams %}'{{ team.final_adj_raw_score }}',{% endfor %}],
+      borderColor: '#339966',
+      backgroundColor: '#339966',
+    },
+    {
+      label: 'Raw',
+      data: [{% for team in teams %}'{{ team.current_raw_score }}',{% endfor %}],
+      borderColor: '#0099e6',
+      backgroundColor: '#0099e6',
+    }
+  ]
+};
+const config = {
+  type: 'bar',
+  data: data,
+  options: {
+    responsive: true,
+	scales: {
+        yAxes: [{
+            display: true,
+            ticks: {
+                suggestedMin: 56, 
+				suggestedMax: 82,
+				stepSize: 2,
+            }
+        }]
+	},
+  },
+};
+var myChart = new Chart(
+	document.getElementById('results-chart'),
+	config
+);
+</script>
+{% endif %}
+{% endblock %}
+
+

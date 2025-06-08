@@ -1,0 +1,17 @@
+{% extends "site/base.html" %}
+{% load static %}
+{% load main.templatetags.assets %}
+{% get_static_prefix as STATIC_PREFIX %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <h1>New User Registration</h1>
+{% endblock %}
+
+{% block content %}
+	<form method="post">
+		{% csrf_token %}
+		{{ form|crispy }}
+	<button class="btn btn-primary" type="submit">Submit</button>
+	</form>
+{% endblock %}

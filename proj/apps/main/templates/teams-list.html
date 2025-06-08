@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+{% load assets %}
+{% load crispy_forms_tags %}
+
+{% block head-styles %}
+<style>
+table.teams * {
+    font-size: 18px;
+    line-height: 20px;
+    padding: 5px;
+    border-collapse: collapse;
+    border: 1px solid #FFF;
+}
+table.teams {
+    border: 1px solid #999;
+    border-collapse: collapse;
+}
+table.teams th {
+	background-color: #777;
+}
+table.teams td {
+}
+table.teams th, table.teams td {
+    border: 1px solid #999;
+    vertical-align: top;
+}
+.strike {
+    text-decoration: line-through;
+}
+
+@media only screen and (max-width: 600px) {
+#ContentContainer {
+    padding: 0 3px;
+}
+.rank-column {
+    width: 40px !important;
+}
+.team-column {
+    width: 40px !important;
+}
+table.teams * {
+    font-size: 12px;
+    line-height: 14px;
+    width: 100%;
+    padding: 0;
+}
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<table class="table table-hover teams">
+    <thead>
+    <tr class="table-dark" style="background-color: #aaa; color: #fff; text-shadow: 2px 2px 2px #555;">
+        <th class="rank-column" style="text-align: center;">Number</th>
+        <th class="team-column" style="text-align: center;">Team</th>
+        <th style="text-align: left;">Players</th>
+        <th style="text-align: center;">Hdcp</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for team in teams %}
+    <tr>
+        <td class="rank-column" style="text-align: center;">{{ forloop.counter }}</td>
+        <td class="team-column" style="text-align: center;">{{ team.name }}</td>
+        <td style="text-align: left;">{{ team.player1 }}<br>{{ team.player2 }}<br>{{ team.player3 }}</td>
+        <td style="text-align: center;">{{ team.handicap|plusminus }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div style="height: 50px;"></div>
+{% endblock %}
+

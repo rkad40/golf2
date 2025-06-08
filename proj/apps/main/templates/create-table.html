@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% load static %}
+{% load assets %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<p>
+Use this form to wholly create or overwrite an existing table.
+NOTE: The data will be reformatted into a spreadsheet that you may review and edit before it is saved.  
+</p>
+<div style="height: 15px;"></div>
+<form method="post" action="" enctype="multipart/form-data">
+	{% csrf_token %}
+    {{ form|crispy }}
+	<div style="height: 15px;"></div>
+	<button class="btn btn-primary" type="submit"><i class="fas fa-chevron-circle-right"></i> Continue</button>
+	<div style="height: 25px;"></div>
+</form>
+{% endblock %}
+
+{% block post-script %}
+<script>
+$( document ).ready(function() {
+  $('#div_id_course').hide();
+  $('#id_table').change(function(){
+	let selected = $("#id_table option:selected").text();
+	if (selected.startsWith('Holes')) {
+		$('#div_id_course').show(200);
+	} else {
+		$('#div_id_course').hide(200);
+	}
+  });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,554 @@
+[
+    {
+        "codename": "add_logentry",
+        "content_type_id": 1,
+        "id": 1,
+        "name": "Can add log entry"
+    },
+    {
+        "codename": "change_logentry",
+        "content_type_id": 1,
+        "id": 2,
+        "name": "Can change log entry"
+    },
+    {
+        "codename": "delete_logentry",
+        "content_type_id": 1,
+        "id": 3,
+        "name": "Can delete log entry"
+    },
+    {
+        "codename": "view_logentry",
+        "content_type_id": 1,
+        "id": 4,
+        "name": "Can view log entry"
+    },
+    {
+        "codename": "add_permission",
+        "content_type_id": 2,
+        "id": 5,
+        "name": "Can add permission"
+    },
+    {
+        "codename": "change_permission",
+        "content_type_id": 2,
+        "id": 6,
+        "name": "Can change permission"
+    },
+    {
+        "codename": "delete_permission",
+        "content_type_id": 2,
+        "id": 7,
+        "name": "Can delete permission"
+    },
+    {
+        "codename": "view_permission",
+        "content_type_id": 2,
+        "id": 8,
+        "name": "Can view permission"
+    },
+    {
+        "codename": "add_group",
+        "content_type_id": 3,
+        "id": 9,
+        "name": "Can add group"
+    },
+    {
+        "codename": "change_group",
+        "content_type_id": 3,
+        "id": 10,
+        "name": "Can change group"
+    },
+    {
+        "codename": "delete_group",
+        "content_type_id": 3,
+        "id": 11,
+        "name": "Can delete group"
+    },
+    {
+        "codename": "view_group",
+        "content_type_id": 3,
+        "id": 12,
+        "name": "Can view group"
+    },
+    {
+        "codename": "add_contenttype",
+        "content_type_id": 4,
+        "id": 13,
+        "name": "Can add content type"
+    },
+    {
+        "codename": "change_contenttype",
+        "content_type_id": 4,
+        "id": 14,
+        "name": "Can change content type"
+    },
+    {
+        "codename": "delete_contenttype",
+        "content_type_id": 4,
+        "id": 15,
+        "name": "Can delete content type"
+    },
+    {
+        "codename": "view_contenttype",
+        "content_type_id": 4,
+        "id": 16,
+        "name": "Can view content type"
+    },
+    {
+        "codename": "add_session",
+        "content_type_id": 5,
+        "id": 17,
+        "name": "Can add session"
+    },
+    {
+        "codename": "change_session",
+        "content_type_id": 5,
+        "id": 18,
+        "name": "Can change session"
+    },
+    {
+        "codename": "delete_session",
+        "content_type_id": 5,
+        "id": 19,
+        "name": "Can delete session"
+    },
+    {
+        "codename": "view_session",
+        "content_type_id": 5,
+        "id": 20,
+        "name": "Can view session"
+    },
+    {
+        "codename": "add_source",
+        "content_type_id": 6,
+        "id": 21,
+        "name": "Can add source"
+    },
+    {
+        "codename": "change_source",
+        "content_type_id": 6,
+        "id": 22,
+        "name": "Can change source"
+    },
+    {
+        "codename": "delete_source",
+        "content_type_id": 6,
+        "id": 23,
+        "name": "Can delete source"
+    },
+    {
+        "codename": "view_source",
+        "content_type_id": 6,
+        "id": 24,
+        "name": "Can view source"
+    },
+    {
+        "codename": "add_thumbnail",
+        "content_type_id": 7,
+        "id": 25,
+        "name": "Can add thumbnail"
+    },
+    {
+        "codename": "change_thumbnail",
+        "content_type_id": 7,
+        "id": 26,
+        "name": "Can change thumbnail"
+    },
+    {
+        "codename": "delete_thumbnail",
+        "content_type_id": 7,
+        "id": 27,
+        "name": "Can delete thumbnail"
+    },
+    {
+        "codename": "view_thumbnail",
+        "content_type_id": 7,
+        "id": 28,
+        "name": "Can view thumbnail"
+    },
+    {
+        "codename": "add_thumbnaildimensions",
+        "content_type_id": 8,
+        "id": 29,
+        "name": "Can add thumbnail dimensions"
+    },
+    {
+        "codename": "change_thumbnaildimensions",
+        "content_type_id": 8,
+        "id": 30,
+        "name": "Can change thumbnail dimensions"
+    },
+    {
+        "codename": "delete_thumbnaildimensions",
+        "content_type_id": 8,
+        "id": 31,
+        "name": "Can delete thumbnail dimensions"
+    },
+    {
+        "codename": "view_thumbnaildimensions",
+        "content_type_id": 8,
+        "id": 32,
+        "name": "Can view thumbnail dimensions"
+    },
+    {
+        "codename": "add_attachment",
+        "content_type_id": 9,
+        "id": 33,
+        "name": "Can add attachment"
+    },
+    {
+        "codename": "change_attachment",
+        "content_type_id": 9,
+        "id": 34,
+        "name": "Can change attachment"
+    },
+    {
+        "codename": "delete_attachment",
+        "content_type_id": 9,
+        "id": 35,
+        "name": "Can delete attachment"
+    },
+    {
+        "codename": "view_attachment",
+        "content_type_id": 9,
+        "id": 36,
+        "name": "Can view attachment"
+    },
+    {
+        "codename": "add_user",
+        "content_type_id": 10,
+        "id": 37,
+        "name": "Can add user"
+    },
+    {
+        "codename": "change_user",
+        "content_type_id": 10,
+        "id": 38,
+        "name": "Can change user"
+    },
+    {
+        "codename": "delete_user",
+        "content_type_id": 10,
+        "id": 39,
+        "name": "Can delete user"
+    },
+    {
+        "codename": "view_user",
+        "content_type_id": 10,
+        "id": 40,
+        "name": "Can view user"
+    },
+    {
+        "codename": "add_team",
+        "content_type_id": 11,
+        "id": 41,
+        "name": "Can add team"
+    },
+    {
+        "codename": "change_team",
+        "content_type_id": 11,
+        "id": 42,
+        "name": "Can change team"
+    },
+    {
+        "codename": "delete_team",
+        "content_type_id": 11,
+        "id": 43,
+        "name": "Can delete team"
+    },
+    {
+        "codename": "view_team",
+        "content_type_id": 11,
+        "id": 44,
+        "name": "Can view team"
+    },
+    {
+        "codename": "add_mediaexplorer",
+        "content_type_id": 12,
+        "id": 45,
+        "name": "Can add media explorer"
+    },
+    {
+        "codename": "change_mediaexplorer",
+        "content_type_id": 12,
+        "id": 46,
+        "name": "Can change media explorer"
+    },
+    {
+        "codename": "delete_mediaexplorer",
+        "content_type_id": 12,
+        "id": 47,
+        "name": "Can delete media explorer"
+    },
+    {
+        "codename": "view_mediaexplorer",
+        "content_type_id": 12,
+        "id": 48,
+        "name": "Can view media explorer"
+    },
+    {
+        "codename": "add_mediafolderpolicy",
+        "content_type_id": 13,
+        "id": 49,
+        "name": "Can add media folder policy"
+    },
+    {
+        "codename": "change_mediafolderpolicy",
+        "content_type_id": 13,
+        "id": 50,
+        "name": "Can change media folder policy"
+    },
+    {
+        "codename": "delete_mediafolderpolicy",
+        "content_type_id": 13,
+        "id": 51,
+        "name": "Can delete media folder policy"
+    },
+    {
+        "codename": "view_mediafolderpolicy",
+        "content_type_id": 13,
+        "id": 52,
+        "name": "Can view media folder policy"
+    },
+    {
+        "codename": "add_mediafolder",
+        "content_type_id": 14,
+        "id": 53,
+        "name": "Can add media folder"
+    },
+    {
+        "codename": "change_mediafolder",
+        "content_type_id": 14,
+        "id": 54,
+        "name": "Can change media folder"
+    },
+    {
+        "codename": "delete_mediafolder",
+        "content_type_id": 14,
+        "id": 55,
+        "name": "Can delete media folder"
+    },
+    {
+        "codename": "view_mediafolder",
+        "content_type_id": 14,
+        "id": 56,
+        "name": "Can view media folder"
+    },
+    {
+        "codename": "add_mediafile",
+        "content_type_id": 15,
+        "id": 57,
+        "name": "Can add media file"
+    },
+    {
+        "codename": "change_mediafile",
+        "content_type_id": 15,
+        "id": 58,
+        "name": "Can change media file"
+    },
+    {
+        "codename": "delete_mediafile",
+        "content_type_id": 15,
+        "id": 59,
+        "name": "Can delete media file"
+    },
+    {
+        "codename": "view_mediafile",
+        "content_type_id": 15,
+        "id": 60,
+        "name": "Can view media file"
+    },
+    {
+        "codename": "add_course",
+        "content_type_id": 16,
+        "id": 61,
+        "name": "Can add course"
+    },
+    {
+        "codename": "change_course",
+        "content_type_id": 16,
+        "id": 62,
+        "name": "Can change course"
+    },
+    {
+        "codename": "delete_course",
+        "content_type_id": 16,
+        "id": 63,
+        "name": "Can delete course"
+    },
+    {
+        "codename": "view_course",
+        "content_type_id": 16,
+        "id": 64,
+        "name": "Can view course"
+    },
+    {
+        "codename": "add_coursehole",
+        "content_type_id": 17,
+        "id": 65,
+        "name": "Can add course hole"
+    },
+    {
+        "codename": "change_coursehole",
+        "content_type_id": 17,
+        "id": 66,
+        "name": "Can change course hole"
+    },
+    {
+        "codename": "delete_coursehole",
+        "content_type_id": 17,
+        "id": 67,
+        "name": "Can delete course hole"
+    },
+    {
+        "codename": "view_coursehole",
+        "content_type_id": 17,
+        "id": 68,
+        "name": "Can view course hole"
+    },
+    {
+        "codename": "add_hole",
+        "content_type_id": 17,
+        "id": 69,
+        "name": "Can add hole"
+    },
+    {
+        "codename": "change_hole",
+        "content_type_id": 17,
+        "id": 70,
+        "name": "Can change hole"
+    },
+    {
+        "codename": "delete_hole",
+        "content_type_id": 17,
+        "id": 71,
+        "name": "Can delete hole"
+    },
+    {
+        "codename": "view_hole",
+        "content_type_id": 17,
+        "id": 72,
+        "name": "Can view hole"
+    },
+    {
+        "codename": "add_tournament",
+        "content_type_id": 18,
+        "id": 73,
+        "name": "Can add tournament"
+    },
+    {
+        "codename": "change_tournament",
+        "content_type_id": 18,
+        "id": 74,
+        "name": "Can change tournament"
+    },
+    {
+        "codename": "delete_tournament",
+        "content_type_id": 18,
+        "id": 75,
+        "name": "Can delete tournament"
+    },
+    {
+        "codename": "view_tournament",
+        "content_type_id": 18,
+        "id": 76,
+        "name": "Can view tournament"
+    },
+    {
+        "codename": "add_teamaccess",
+        "content_type_id": 19,
+        "id": 77,
+        "name": "Can add team access"
+    },
+    {
+        "codename": "change_teamaccess",
+        "content_type_id": 19,
+        "id": 78,
+        "name": "Can change team access"
+    },
+    {
+        "codename": "delete_teamaccess",
+        "content_type_id": 19,
+        "id": 79,
+        "name": "Can delete team access"
+    },
+    {
+        "codename": "view_teamaccess",
+        "content_type_id": 19,
+        "id": 80,
+        "name": "Can view team access"
+    },
+    {
+        "codename": "add_cache",
+        "content_type_id": 20,
+        "id": 81,
+        "name": "Can add cache"
+    },
+    {
+        "codename": "change_cache",
+        "content_type_id": 20,
+        "id": 82,
+        "name": "Can change cache"
+    },
+    {
+        "codename": "delete_cache",
+        "content_type_id": 20,
+        "id": 83,
+        "name": "Can delete cache"
+    },
+    {
+        "codename": "view_cache",
+        "content_type_id": 20,
+        "id": 84,
+        "name": "Can view cache"
+    },
+    {
+        "codename": "add_award",
+        "content_type_id": 21,
+        "id": 85,
+        "name": "Can add Closest to the Hole / Longest Drive Award"
+    },
+    {
+        "codename": "change_award",
+        "content_type_id": 21,
+        "id": 86,
+        "name": "Can change Closest to the Hole / Longest Drive Award"
+    },
+    {
+        "codename": "delete_award",
+        "content_type_id": 21,
+        "id": 87,
+        "name": "Can delete Closest to the Hole / Longest Drive Award"
+    },
+    {
+        "codename": "view_award",
+        "content_type_id": 21,
+        "id": 88,
+        "name": "Can view Closest to the Hole / Longest Drive Award"
+    },
+    {
+        "codename": "add_article",
+        "content_type_id": 22,
+        "id": 89,
+        "name": "Can add article"
+    },
+    {
+        "codename": "change_article",
+        "content_type_id": 22,
+        "id": 90,
+        "name": "Can change article"
+    },
+    {
+        "codename": "delete_article",
+        "content_type_id": 22,
+        "id": 91,
+        "name": "Can delete article"
+    },
+    {
+        "codename": "view_article",
+        "content_type_id": 22,
+        "id": 92,
+        "name": "Can view article"
+    }
+]

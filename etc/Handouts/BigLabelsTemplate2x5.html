@@ -1,0 +1,148 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>A Basic HTML5 Template</title>
+	<meta name="description" content="A simple HTML5 Template for new projects.">
+	<meta name="author" content="SitePoint">
+
+	<meta property="og:title" content="A Basic HTML5 Template">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">
+	<meta property="og:description" content="A simple HTML5 Template for new projects.">
+	<meta property="og:image" content="image.png">
+
+	<link rel="icon" href="/favicon.ico">
+	<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+	<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+	<style>
+		body {
+			margin: auto;
+			width: 9.0in;
+		}
+
+		body,
+		body * {
+			font-family: Calibri;
+			box-sizing: border-box;
+			font-size: 18px;
+			line-height: 20px;
+		}
+
+		.center {
+			margin: auto;
+			width: 100%;
+			text-align: center;
+			margin-bottom: 2px;
+		}
+		
+		.page {
+			padding: 45px 0;
+			width: 9.0in;
+			border: 1px solid transparent;
+			position: relative;
+		}
+		
+		table.labels {
+			border: 1px solid transparent;
+			border-collapse: collapse;
+			width: 100%;
+		}
+		table.labels td {
+			border: 1px solid transparent;
+			position: relative;
+		}
+		table.labels td.card {
+			height: 2.25in; 
+			width: 3.8in; 
+		}
+		table.labels td.spacer {
+			width: 10px;
+			border: none;
+		}
+		
+		.name {
+			position: absolute;
+			top: 80px;
+			left: 30px;
+			font-size: 48px;
+			font-weight: 900;
+		}
+		
+		.player1, .player2, .player3 {
+			left: 130px;
+			position: absolute;
+			font-size: 32px;
+			font-weight: bold;
+		}
+
+		.player1 {
+			top:  45px;
+		}
+
+		.player2 {
+			top: 85px;
+		}
+
+		.player3 {
+			top: 125px;
+		}
+		
+		@media print {
+			.pagebreak {
+				clear: both;
+				page-break-after: always;
+			}
+		}
+		
+		
+
+	</style>
+
+</head>
+
+<body>
+    
+	{% for team in teams %}
+	{% if team.end %}
+		</table>
+	</div>
+	
+	<div class="pagebreak"></div>
+	{% endif %}
+
+	{% if team.begin %}
+	<div class="page">
+		<table class="labels">
+	{% endif %}
+	
+	{% if team.left %}
+			<tr>
+				<td class="card">
+					<div class="name">{{ team.name }}</div>
+					<div class="player1">{{ team.player1 }}</div>
+					<div class="player2">{{ team.player2 }}</div>
+					<div class="player3">{{ team.player3 }}</div>
+				</td>
+	{% endif %}
+
+	{% if team.right %}
+				<td class="spacer"></td>
+				<td class="card">
+					<div class="name">{{ team.name }}</div>
+					<div class="player1">{{ team.player1 }}</div>
+					<div class="player2">{{ team.player2 }}</div>
+					<div class="player3">{{ team.player3 }}</div>
+				</td>
+			</tr>
+	{% endif %}
+	{% endfor %}
+
+</body>
+
+</html>

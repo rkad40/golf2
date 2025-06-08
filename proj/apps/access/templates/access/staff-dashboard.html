@@ -1,0 +1,70 @@
+{% extends "site/base.html" %}
+{% load assets %}
+{% load thumbnail %}
+{% load main.templatetags.assets %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+<h1>Staff Dashboard</h1>
+{% endblock %}
+
+
+{% block content %}
+<div class="section">
+    <div class="container-xl main-content">
+	
+        <div class="ImageButtonWrapper" style="background-color: transparent; border: 0px solid #b0b0b0;">
+
+            <a class="ImageButton" href="/admin">
+                <img src="{% static 'site/img/tiles/Admin.png' %}">
+                <div style="background-color: #000000;">
+                    <h1>Admin Dashboard</h1>
+                    <p>Access to the admin dashboard.</p>
+                </div>
+            </a>
+
+            <a class="ImageButton" href="/admin/maven/mediaexplorer/">
+                <img src="{% media 'Tiles/MediaFiles.png' %}">
+                <div style="background-color: #901833;">
+                    <h1>Media Files</h1>
+                    <p>Browse, upload, and link media files.</p>
+                </div>
+            </a>
+
+            <a class="ImageButton" href="{% url 'post-list' %}">
+                <img src="{% static 'site/img/tiles/Posts.png' %}">
+                <div style="background-color: #4a4021;">
+                    <h1>Parish News Posts</h1>
+                    <p>Create, modify and delete parish news posts.</p>
+                </div>
+            </a>
+
+            <a class="ImageButton" href="{% url 'page-list' %}">
+                <img src="{% static 'site/img/tiles/Pages.png' %}">
+                <div style="background-color: #363366;">
+                    <h1>Website Pages</h1>
+                    <p>Update Sacred Heart website pages.</p>
+                </div>
+            </a>
+
+            <a class="ImageButton" href="/help/doc/view/getting-started">
+                <img src="{% media 'Tiles/Help.jpg' %}">
+                <div style="background-color: #5184fa;">
+                    <h1>Help</h1>
+                    <p>Get help with staff actions.</p>
+                </div>
+            </a>
+
+            <a class="ImageButton" href="/help/doc/view/about">
+                <img src="{% media '/Tiles/Info.jpg' %}">
+                <div style="background-color: #172738;">
+                    <h1>About</h1>
+                    <p>Site version and history.</p>
+                </div>
+            </a>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

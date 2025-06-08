@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% load assets %}
+{% load crispy_forms_tags %}
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Rockne Invitational Golf Tournament</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <link href="{% static 'site/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'site/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+    <link href="{% static 'site/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'site/vendor/icofont/icofont.min.css' %}" rel="stylesheet">
+    <link href="{% static 'site/vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'site/vendor/dialog/dialog.css' %}" rel="stylesheet">
+    <link href="{% static 'site/vendor/imgbutton/imgbutton.css' %}" rel="stylesheet">
+    <link href="{% static 'site/vendor/flatpickr/flatpickr_material_blue.css' %}" rel="stylesheet">
+    <link href="{% static_reload 'site/css/site.css' %}" rel="stylesheet">
+	<link href="{% static_reload 'maven/maven-charcoal.css' %}" rel="stylesheet">
+	<link rel="stylesheet" href="{% static 'site/vendor/owl.carousel/assets/owl.carousel.min.css' %}">
+	<link rel="stylesheet" href="{% static 'site/vendor/owl.carousel/assets/owl.theme.default.min.css' %}">
+	{% block head-css-link %}{% endblock %}
+	<script>"use strict"; var IS_ADMIN = false;</script>
+	<script>var SITE_DEBUG = {% site_debug %};</script>
+	<script>var HTTP_STATIC_URL = "{% http_static_url %}";</script>
+	<script>var HTTP_MEDIA_URL = "{% http_media_url %}";</script>
+    <script src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+    <script src="{% static 'site/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'site/vendor/jquery.easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'site/vendor/jquery.timeago/jquery.timeago.js' %}"></script>
+    <script src="{% static 'site/vendor/jquery.waypoints/jquery.waypoints.js' %}"></script>
+    <script src="{% static 'site/vendor/aos/aos.js' %}"></script>
+    <script src="{% static 'site/vendor/fontawesome/all.js' %}"></script>
+    <script src="{% static 'site/vendor/moment/moment.min.js' %}"></script>
+    <script src="{% static_reload 'site/vendor/imgbutton/imgbutton.js' %}"></script>
+    <script src="{% static_reload 'site/vendor/dialog/dialog.js' %}"></script>
+    <script src="{% static 'site/vendor/flatpickr/flatpickr.js' %}"></script>
+    <script src="{% static_reload 'site/js/site.js' %}"></script>
+    <script src="{% static_reload 'maven/maven-1.2.js' %}"></script>
+	{% block head-styles %}{% endblock %}
+	<style>
+	html {
+  		scroll-behavior: smooth;
+	}
+	#hero {
+		width: 100%;
+		height: 100vh;
+		{% if hero_image_file %}
+		background: url("{{ hero_image_file }}") top center;
+		{% endif %}
+		background-color: #111 !important;
+		background-size: cover;
+		position: relative;
+	}
+	.article-title {
+		font-size: 22px;
+		line-height: 22px;
+		font-weight: 700;
+		margin: 20px 0px;
+	}
+	.article .intro, .article .intro *, .article .cont, .article .cont * {
+		font-size: 16px;
+		line-height: 18px;
+	}
+	.article .intro {
+		display: relative;
+	}
+	.article .button {
+		margin: 10px 0px;
+		display: relative;
+	}
+	.article .cont {
+		display: none;
+	}
+	.article .cont.active {
+		background-color: #e6f9ff;
+		color: #0099cc;
+	}
+	.whoami, .whoami * {
+		font-size: 16px;
+		line-height: 18px;
+	}
+	</style>
+</head>
+
+<body>
+
+    <div class="overlay"></div>
+
+    <!--
+         _   _                           __  _   _
+        | | | | ___  _ __ ___   ___     / / | | | | ___ _ __ ___
+        | |_| |/ _ \| '_ ` _ \ / _ \   / /  | |_| |/ _ \ '__/ _ \
+        |  _  | (_) | | | | | |  __/  / /   |  _  |  __/ | | (_) |
+        |_| |_|\___/|_| |_| |_|\___| /_/    |_| |_|\___|_|  \___/
+
+    -->
+
+    <a name="home"></a>
+    <nav id="home-navbar" class="navbar fixed-top navbar-expand-xl navbar-dark bg-dark" style="border-bottom: 2px solid #ccc; background-color: rgb(26, 78, 122);">
+        <div class="container-xl">
+
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img style="width: 30vw; min-width: 220px; max-width: 300px; height: auto;" src="{% static 'site/img/WhiteLogo2.png' %}">
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#page-navbar"
+                aria-controls="page-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="page-navbar">
+                <ul class="navbar-nav ml-auto">
+					{% include 'inc/navbar-buttons.html' %}
+                    <div class="dialog-spacer"></div>
+                </ul>
+            </div>
+
+
+        </div>
+    </nav>
+	<section id="hero"></section>
+	<div id="BottomButtonBar" style="background-color: rgb(26, 78, 122); height: 40px; position: fixed; bottom: 0; right: 0; left: 0; z-index: 100000;">
+		<div style="background-color: #bbb; height: 2px;"></div>
+		<div style="position: relative; text-align: center;">
+			<a class="btn btn-sm btn-outline-secondary" href="{% url 'home-prev' %}" style="color: #ccc; position: absolute; left: 7px; bottom: -3px; width: 70px;"><i class="fas fa-chevron-left"></i> Prev</a>
+			{% if request.session.team.access %}
+			<a class="btn btn-sm btn-outline-secondary" href="#NewsInfo0" style="color: #ccc; position: relative; bottom: -3px; width: 120px;"><i class="fas fa-chevron-down"></i> News &amp; Info</a>
+			{% else %}
+			<a class="btn btn-sm btn-outline-secondary" href="{% url 'team-login' %}" style="color: #ccc; position: relative; bottom: -3px; width: 120px;"><i class="fas fa-sign-in-alt"></i> Log In</a>
+			{% endif %}
+			<a class="btn btn-sm btn-outline-secondary" href="{% url 'home-next' %}" style="color: #ccc; position: absolute; right: 7px; bottom: -3px; width: 70px;">Next <i class="fas fa-chevron-right"></i></a>
+		</div>
+	</div>
+
+    <!--
+         ____             _             _
+        / ___| ___  _ __ | |_ ___ _ __ | |_
+        | |   / _ \| '_ \| __/ _ \ '_ \| __|
+        | |__| (_) | | | | ||  __/ | | | |_
+        \____|\___/|_| |_|\__\___|_| |_|\__|
+
+    -->
+
+    <div style="background-color: #216fb4; height: 50px;"></div>
+
+    <div class="base-content" style="background-color: inherit;">
+        <div class="container-xl">
+			<div class="absolute-center">
+			{% include 'inc/messages.html' %}
+			</div>
+
+			{% if request.session.team.access %}
+			<div class="whoami alert alert-info" role="alert">
+				<i class="fas fa-users"></i> <strong>Team {{ request.session.team.name }}</strong>: {{ request.session.team.players }}.
+			</div>
+			<div style="margin: 20px 0px 10px 0px; height: 1px; background-color: #ccc;"></div>
+			{% endif %}
+
+            {% block content %}{% endblock %}
+			{% for article in articles %}
+			<div style="position: relative;">
+			<a name="NewsInfo{{ forloop.counter0 }}" style="position: absolute; top: -80px;"></a>
+			<h2 class="article-title">{{ article.title|safe }}</h2>
+			<div id="article-{{ article.slug|safe }}" class="article">
+			{{ article.content|safe }}
+			</div>
+			<div style="margin: 20px 0px 10px 0px; height: 1px; background-color: #ccc;"></div>
+			</div>
+			{% endfor %}
+			<div style="height: 20px;"></div>
+			<p style="text-align: center; font-size: 35px; line-height: 35px; font-weight: bold; color: #1d4999; ">Swing. Swear. Drink. Repeat.</p>
+			<p style="text-align: center;"><img src="/media/Images/LogoPlain.png" style="max-width: 100%; height: auto;"></p>
+			<p style="text-align: center; font-size: 28px; line-height: 28px; font-weight: bold; color: #1d4999; ">Here at the Rockne Invitational Golf Tournament, that's just how we roll.</p>
+        </div>
+    </div>
+	
+	<div style="height: 100px;"></div>
+
+    {% block post-script %}{% endblock %}
+	{% include 'inc/post-script.html' %}
+	<script>
+	function articleAction(key, ms) {
+		let buttonType = $(`#article-${key} .button .btn`).data('name');
+		if (buttonType == 'read-more') {
+			$(`#article-${key} .cont`).addClass('active');
+			$(`#article-${key} .button .btn`).data('name', 'read-less');
+			$(`#article-${key} .button .btn`).html('Read less');
+			$(`#article-${key} .cont`).slideDown(ms);
+			setTimeout(function() {$(`#article-${key} .cont`).removeClass('active');}, ms)
+		} else {
+			$(`#article-${key} .cont`).addClass('active');
+			$(`#article-${key} .button .btn`).data('name', 'read-more');
+			$(`#article-${key} .button .btn`).html('Read more');
+			$(`#article-${key} .cont`).slideUp(ms);
+			setTimeout(function() {$(`#article-${key} .cont`).removeClass('active');}, ms)
+		}
+	};
+
+	$(document).ready(
+
+    function () {
+
+		// When you start to scroll down, hide the bottom button bar.  Subsequently, when you scroll
+		// all the way to the top, show the bottom button bar.
+        let notYetScrolled = true;
+        function scrollListener() {
+			if ($(document).scrollTop() > 1) 
+			{
+				$(`#BottomButtonBar`).slideUp(500);
+				notYetScrolled = false;
+			} 
+			else 
+			{
+				if (!notYetScrolled) $(`#BottomButtonBar`).slideDown(500);
+			}
+        };
+        $(document).scroll(scrollListener);
+        scrollListener();
+	});
+	</script>
+
+</body>
+
+</html>

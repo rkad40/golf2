@@ -1,0 +1,8 @@
+{% autoescape off %}
+Hi {{ user.first_name }}!
+
+Did you recently sign up for an account on the Sacred Heart Catholic Church website?  If so, please click on the link below to confirm your registration:
+
+http://{{ domain }}{% url 'user-activate' uidb64=uid token=token %}
+
+{% endautoescape %}

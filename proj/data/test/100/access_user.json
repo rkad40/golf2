@@ -1,0 +1,17 @@
+[
+    {
+        "date_joined": "2021-08-07 03:24:45.717486",
+        "email": "rkad40@yahoo.com",
+        "first_name": "",
+        "id": 1,
+        "is_active": 1,
+        "is_staff": 1,
+        "is_superuser": 1,
+        "last_login": "2021-08-20 22:31:53.250556",
+        "last_name": "",
+        "password": "pbkdf2_sha256$216000$fEO6SXZlgR4T$DnY1YwaYS2uO2CJqJAY9XLOW7VrCWe7ivG3geAyr81M=",
+        "phone": null,
+        "provider": null,
+        "username": "admin"
+    }
+]

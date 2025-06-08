@@ -1,0 +1,189 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>A Basic HTML5 Template</title>
+	<meta name="description" content="A simple HTML5 Template for new projects.">
+	<meta name="author" content="SitePoint">
+
+	<meta property="og:title" content="A Basic HTML5 Template">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://www.sitepoint.com/a-basic-html5-template/">
+	<meta property="og:description" content="A simple HTML5 Template for new projects.">
+	<meta property="og:image" content="image.png">
+
+	<link rel="icon" href="/favicon.ico">
+	<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+	<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+	<style>
+		body {
+			margin: auto;
+			width: 8.0in;
+		}
+
+		body,
+		body * {
+			font-family: Calibri;
+			box-sizing: border-box;
+			font-size: 18px;
+			line-height: 20px;
+		}
+
+		.center {
+			margin: auto;
+			width: 100%;
+			text-align: center;
+		}
+
+		.logo {
+			width: 450px;
+			height: auto;
+			position: relative;
+			top: -10px;
+		}
+
+		.handout {
+			height: 10in;
+			width: 100%;
+			border: 1px solid transparent;
+			margin: auto;
+		}
+
+		@media print {
+			.pagebreak {
+				clear: both;
+				page-break-after: always;
+			}
+		}
+
+		td {
+			vertical-align: top;
+			padding-bottom: 5px;
+		}
+
+		.qr-code {
+		width: 125px; height: auto;
+		}
+
+		table.credentials {
+			border: 1px solid #aaa;
+			width: 100%;
+			text-align: center;
+			margin: auto;
+			border-collapse: collapse;
+		}
+
+		table.credentials th, table.credentials td {
+			border: 1px solid #aaa;
+			border-collapse: collapse;
+		}
+
+        .scorecard-image {
+            text-align: center;
+            margin: auto;
+        }
+
+        .scorecard-image img {
+            width: 80%; height: auto;
+        }
+		
+		.handout {
+			margin-top: 35px;
+		}
+
+	</style>
+
+</head>
+
+<body>
+    <!-- handout -->
+	
+	{% for name, team in teams.items() %}
+	<div class="handout">
+		<table style="width: 100%;"><tr>
+        <td style="text-align: left;"><img class="logo" src="Handouts/Logo.png"></td>
+        <td style="text-align: right;">
+            <div style="text-align: center; position: relative; top: 15px; border: 1px solid #aaa; border-radius: 10px;">
+            <div>Need Help?</div>
+            <div><strong>Rodney</strong></div>
+            <div><strong>512-461-6673</strong></div>
+            </div>
+        </td>
+        </tr></table>
+		<div style="position: relative; top: -40px;">
+		<table class="instructions">
+			<tr>
+				<td style="width: 20px;"><strong>1.</strong></td>
+				<td><strong>Go to the Website.</strong> Either (1) scan the QR code on the right <span style="font-style: italic; font-weight: bold;">-OR-</span> (2) go to the website <strong>http://rockne.golf</strong>. Do <span style="font-style: italic; text-decoration: underline;">NOT</span> add <strong>.com</strong> to the end of the website address.  It is <strong>rockne.golf</strong>, just as shown.</td> 
+                <td rowspan="2" style="padding-left: 5px;">
+					<img class="qr-code" src="Handouts/QRCode.png">
+				</td>
+			</tr>
+			<tr>
+				<td><strong>2.</strong></td>
+				<td><strong>Log In.</strong> Either (1) select <strong>Team Log In</strong> from the menu bar, <span style="font-style: italic; font-weight: bold;">-OR-</span> (2) find and click the button at the bottom of the home page that says <strong>Log In</strong>. Then enter your <strong>Team Name</strong> and <strong>Password</strong> shown below: </td>
+			</tr>
+		</table>
+
+		<div style="height: 10px;"></div>
+
+        <div style="padding-left: 27px; padding-right: 2px;">
+		<table class="credentials">
+		<tr>
+		<th>Team Name</th>
+		<th>Password</th>
+		<th>Start Hole</th>
+		<th>Players</th>
+		<th>Playing With</th>
+		</tr>
+		<tr>
+		<td style="vertical-align: middle;">{{ team.name }}</td>
+		<td style="vertical-align: middle;">{{ team.password }}</td>
+		<td style="vertical-align: middle;">{{ team.start_hole }}</td>
+		<td style="vertical-align: middle;">{{ team.player1 }}<br>{{ team.player2 }}<br>{{ team.player3 }}</td>
+		<td style="vertical-align: middle;">{% if team.paired_with in teams %}{% with team2 = teams[team.paired_with] %}
+			{{ team2.player1 }}<br>{{ team2.player2 }}<br>{{ team2.player3 }}
+			{% endwith %}{% else %}Yourselves :){% endif %}</td>
+		</tr>
+		</table>
+        </div>
+
+		<div style="height: 10px;"></div>
+
+		<table class="instructions">
+			<tr>
+				<td style="width: 20px;"><strong>3.</strong></td>
+				<td><strong>Go to the Electronic Scorecard.</strong> In the menu bar, select <strong>Scorecard</strong>.</td>
+			</tr>
+			<tr>
+				<td style="width: 20px;"><strong>4.</strong></td>
+				<td><strong>Enter Data.</strong>  Make sure you are on the correct hole you are playing. Enter scores and record designated Closest to the Hole and Longest drive player names directly in the app.</td>
+			</tr>
+		</table>
+
+		<div class="scorecard-image"><img src="Handouts/ElectronicScorecardInstuctions.png"></div>
+
+		<table class="instructions">
+			<tr>
+				<td style="width: 20px;"><strong>&nbsp;</strong></td>
+				<td><strong>NOTE:</strong> Only one team member can enter scores.  But all team members can be logged in and monitor the scorecard leaderboards.  Just hit the <strong>Refresh</strong> button at the bottom of the page.</td>
+			</tr>
+			<tr>
+				<td style="width: 20px;"><strong>5.</strong></td>
+				<td><strong>Update Your Player Profile.</strong> At some point today, select <strong>Players</strong> from the top menu bar and update all team member contact information.</td>
+			</tr>
+		</table>
+
+		</div>
+	</div>
+	<div class="pagebreak"></div>
+	{% endfor %}
+
+</body>
+
+</html>

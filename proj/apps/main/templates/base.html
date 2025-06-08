@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+{% load assets %}
+{% load crispy_forms_tags %}
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Rockne Invitational Golf Tournament{% if title %} : {{ title }}{% endif %}</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+    <link href="{% static 'site/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'site/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+    <link href="{% static 'site/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'site/vendor/icofont/icofont.min.css' %}" rel="stylesheet">
+    <link href="{% static 'site/vendor/aos/aos.css' %}" rel="stylesheet">
+    <link href="{% static 'site/vendor/dialog/dialog.css' %}" rel="stylesheet">
+    <link href="{% static 'site/vendor/imgbutton/imgbutton.css' %}" rel="stylesheet">
+    <link href="{% static 'site/vendor/flatpickr/flatpickr_material_blue.css' %}" rel="stylesheet">
+    <link href="{% static_reload 'site/css/site.css' %}" rel="stylesheet">
+	<!-- <link href="{% static_reload 'maven/maven-charcoal.css' %}" rel="stylesheet"> -->
+	<link rel="stylesheet" href="{% static 'site/vendor/owl.carousel/assets/owl.carousel.min.css' %}">
+	<link rel="stylesheet" href="{% static 'site/vendor/owl.carousel/assets/owl.theme.default.min.css' %}">
+	{% block head-css-link %}{% endblock %}
+	<script>"use strict"; var IS_ADMIN = false;</script>
+	<script>var SITE_DEBUG = {% site_debug %};</script>
+	<script>var HTTP_STATIC_URL = "{% http_static_url %}";</script>
+	<script>var HTTP_MEDIA_URL = "{% http_media_url %}";</script>
+    <script src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+    <script src="{% static 'site/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'site/vendor/jquery.easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'site/vendor/jquery.timeago/jquery.timeago.js' %}"></script>
+    <script src="{% static 'site/vendor/jquery.waypoints/jquery.waypoints.js' %}"></script>
+    <script src="{% static 'site/vendor/aos/aos.js' %}"></script>
+    <script src="{% static 'site/vendor/fontawesome/all.js' %}"></script>
+    <script src="{% static 'site/vendor/moment/moment.min.js' %}"></script>
+    <script src="{% static_reload 'site/vendor/imgbutton/imgbutton.js' %}"></script>
+    <script src="{% static_reload 'site/vendor/dialog/dialog.js' %}"></script>
+    <script src="{% static 'site/vendor/flatpickr/flatpickr.js' %}"></script>
+    <script src="{% static_reload 'site/js/site.js' %}"></script>
+    <!-- <script src="{% static_reload 'maven/maven-1.2.js' %}"></script> -->
+	<script src="{% static 'site/vendor/owl.carousel/owl.carousel.min.js' %}"></script>
+	{% block head-script-link %}{% endblock %}
+	{% block head-script %}{% endblock %}
+	{% block head-styles %}{% endblock %}
+</head>
+
+<body>
+
+    <div class="overlay"></div>
+
+    <!--
+         _   _                           __  _   _
+        | | | | ___  _ __ ___   ___     / / | | | | ___ _ __ ___
+        | |_| |/ _ \| '_ ` _ \ / _ \   / /  | |_| |/ _ \ '__/ _ \
+        |  _  | (_) | | | | | |  __/  / /   |  _  |  __/ | | (_) |
+        |_| |_|\___/|_| |_| |_|\___| /_/    |_| |_|\___|_|  \___/
+
+    -->
+
+    <a name="home"></a>
+    <nav id="base-navbar" class="navbar base fixed-top navbar-expand-xl navbar-dark bg-dark">
+        <div class="container-xl">
+
+            <a class="navbar-brand" href="{% url 'home' %}">
+                <img style="width: 30vw; min-width: 220px; max-width: 300px; height: auto;" src="{% static 'site/img/WhiteLogo2.png' %}">
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#page-navbar"
+                aria-controls="page-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="page-navbar">
+                <ul class="navbar-nav ml-auto">
+					{% include 'inc/navbar-buttons.html' %}
+                    <div class="dialog-spacer"></div>
+                </ul>
+            </div>
+			
+        </div>
+    </nav>
+    <div style="height: 50px;"></div>
+    <div id="section0-bottom" section-name="home" class="waypoint-section-up"></div>
+
+    <!--
+         ____             _             _
+        / ___| ___  _ __ | |_ ___ _ __ | |_
+        | |   / _ \| '_ \| __/ _ \ '_ \| __|
+        | |__| (_) | | | | ||  __/ | | | |_
+        \____|\___/|_| |_|\__\___|_| |_|\__|
+
+    -->
+
+    <div class="top-padding"></div>
+
+    <div class="base-header" style="background-color: #216fb4;">
+        <div class="container-xl" style="padding-top: 10px; font-size: 28px; line-height: 28px; font-weight: 700; color: #fff; text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.4);">
+            {{ title }}
+            <div style="height: 10px;"></div>
+        </div>
+    </div>
+
+    <div class="base-content" style="background-color: inherit;">
+        <div id="ContentContainer" class="container-xl">
+			<div style="margin-bottom: 20px;">
+			{% include 'inc/messages.html' %}
+			</div>
+            {% block content %}{% endblock %}
+			<div class="Articles">
+			{% if article %}{{ article.content|safe }}{% endif %}
+			</div>
+        </div>
+    </div>
+
+    <div style="height: 70px;"></div>
+
+    {% block post-script %}{% endblock %}
+	{% include 'inc/post-script.html' %}
+
+</body>
+
+</html>

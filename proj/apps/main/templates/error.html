@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+{% load assets %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="alert alert-danger" role="alert">
+<p><i class="fas fa-exclamation-triangle"></i> <strong>Oh snap!</strong> Looks like you just bladed it, <i>again</i>!</p>
+<p style="text-align: center;"><img style="max-width: 80%;" src="{% media 'Images/Error.png' %}"></p>
+<p>{{ message|safe }}</p>
+</div>
+<div style="height: 300px;"></div>
+{% endblock %}
+
+
+

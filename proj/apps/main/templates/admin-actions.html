@@ -1,0 +1,470 @@
+{% extends "base.html" %}
+{% load static %}
+{% load assets %}
+{% load crispy_forms_tags %}
+
+{% block head-styles %}
+<style>
+a.media, a.media:link, a.media:hover, a.media:active, a.media.visited {
+	text-decoration: none;
+	color: #333;
+}
+.media {
+	padding: 5px;
+	-webkit-box-shadow: 2px 2px 15px 5px rgba(0,0,0,0.05); 
+	box-shadow: 2px 2px 15px 5px rgba(0,0,0,0.05);
+	margin-bottom: 5px;
+}
+a.media:hover, .media:hover {
+	color: #0B86FF;
+	background-color: #fff;
+	cursor: pointer;
+	-webkit-box-shadow: 2px 2px 15px 5px rgba(0,0,0,0.2); 
+	box-shadow: 2px 2px 15px 5px rgba(0,0,0,0.2);
+}
+.media h5 {
+	margin: 0;
+	padding: 0;
+	font-weight: bold;
+	position: relative;
+	top: 2px;
+}
+.media .text, .media .text * {
+	font-size: 16px;
+	margin: 0;
+	padding: 0;
+	line-height: 16px;
+}
+h3 {
+	font-weight: bold;
+	font-size: 24px;
+	background-color: #ddd;
+	margin-top: 20px;
+	margin-bottom: 10px;
+}
+h5 {
+	font-size: 20px;
+	line-height: 20px;
+	font-weight: bold;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<h3>Navigation</h3>
+
+<a class="media" href="{% url 'home' %}">
+  <img class="d-flex mr-3" src="{% static_reload 'site/img/svg/Home.svg' %}" style="width: 48px; height: auto;">
+  <div class="media-body">
+    <h5 class="mt-0">Home</h5>
+    <div class="text">Go to site home page.</div>
+  </div>
+</a>
+
+<a class="media" href="javascript:selectTeamScorecard();">
+  <img class="d-flex mr-3" src="{% static_reload 'site/img/svg/Scorecard.svg' %}" style="width: 48px; height: auto;">
+  <div class="media-body">
+    <h5 class="mt-0">Scorecard</h5>
+    <div class="text">Go to team scorecard.</div>
+  </div>
+</a>
+
+<h3>In Tournament Actions</h3>
+
+{% if request.session.cache.tournament.enable_team_access %}
+<a class="media" href="javascript:disableTeamAccess()">
+  <img class="d-flex mr-3" src="{% static_reload 'site/img/svg/TeamAccessDisable.svg' %}" style="width: 48px; height: auto;">
+  <div class="media-body">
+    <h5 class="mt-0">Disable Team Access</h5>
+    <div class="text">Team access is currently <strong>enabled</strong>.</div>
+  </div>
+</a>
+{% else %}
+<a class="media" href="javascript:enableTeamAccess()">
+  <img class="d-flex mr-3" src="{% static_reload 'site/img/svg/TeamAccessEnable.svg' %}" style="width: 48px; height: auto;">
+  <div class="media-body">
+    <h5 class="mt-0">Enable Team Access</h5>
+    <div class="text">Team access is currently <strong>disabled</strong>.</div>
+  </div>
+</a>
+{% endif %}
+
+{% if request.session.cache.tournament.enable_team_input %}
+<a class="media" href="javascript:disableScorecardEditing()">
+  <img class="d-flex mr-3" src="{% static_reload 'site/img/svg/ScorecardLock.svg' %}" style="width: 48px; height: auto;">
+  <div class="media-body">
+    <h5 class="mt-0">Disable Scorecard Editing</h5>
+    <div class="text">Team scorecared editing is currently <strong>enabled</strong>.</div>
+  </div>
+</a>
+{% else %}
+<a class="media" href="javascript:enableScorecardEditing()">
+  <img class="d-flex mr-3" src="{% static_reload 'site/img/svg/ScorecardEdit.svg' %}" style="width: 48px; height: auto;">
+  <div class="media-body">
+    <h5 class="mt-0">Enable Scorecard Editing</h5>
+    <div class="text">Team scorecared editing is currently <strong>disabled</strong>.</div>
+  </div>
+</a>
+{% endif %}
+
+{% if request.session.cache.tournament.show_leader_board %}
+<a class="media" href="javascript:disableLeaderBoard()">
+  <img class="d-flex mr-3" src="{% static_reload 'site/img/svg/LeaderboardHide.svg' %}" style="width: 48px; height: auto;">
+  <div class="media-body">
+    <h5 class="mt-0">Hide Scorecard Leader Board</h5>
+    <div class="text">Scorecared leader board is currently <strong>visible</strong>.</div>
+  </div>
+</a>
+{% else %}
+<a class="media" href="javascript:enableLeaderBoard()">
+  <img class="d-flex mr-3" src="{% static_reload 'site/img/svg/LeaderboardShow.svg' %}" style="width: 48px; height: auto;">
+  <div class="media-body">
+    <h5 class="mt-0">Show Scorecard Leader Board</h5>
+    <div class="text">Scorecared leader board is currently <strong>hidden</strong>.</div>
+  </div>
+</a>
+{% endif %}
+
+<a class="media" href="{% url 'results' %}">
+  <img class="d-flex mr-3" src="{% static_reload 'site/img/svg/Trophy.svg' %}" style="width: 48px; height: auto;">
+  <div class="media-body">
+    <h5 class="mt-0">Finalize Results</h5>
+    <div class="text">Finalize and view results for the tournament.</div>
+  </div>
+</a>
+
+{% if request.session.cache.tournament.show_results %}
+<a class="media" href="javascript:makeResultsInvisible()">
+  <img class="d-flex mr-3" src="{% static_reload 'site/img/svg/ResultsInvisible.svg' %}" style="width: 48px; height: auto;">
+  <div class="media-body">
+    <h5 class="mt-0">Make Results Invisible</h5>
+    <div class="text">Tournament results are currently <strong>visible</strong>.</div>
+  </div>
+</a>
+{% else %}
+<a class="media" href="javascript:makeResultsVisible()">
+  <img class="d-flex mr-3" src="{% static_reload 'site/img/svg/ResultsVisible.svg' %}" style="width: 48px; height: auto;">
+  <div class="media-body">
+    <h5 class="mt-0">Make Results Visible</h5>
+    <div class="text">Tournament results are currently <strong>invisible</strong>.</div>
+  </div>
+</a>
+{% endif %}
+
+<h3>Pre-Tournament Prep</h3>
+
+<a class="media" href="javascript:compileCache();">
+  <img class="d-flex mr-3" src="{% static_reload 'site/img/svg/Cache.svg' %}" style="width: 48px; height: auto;">
+  <div class="media-body">
+    <h5 class="mt-0">Compile Cached Content</h5>
+    <div class="text">Compile and cache static site content for fast access.</div>
+  </div>
+</a>
+
+<a class="media" href="{% url 'create-table' %}">
+  <img class="d-flex mr-3" src="{% static_reload 'site/img/svg/CreateTable.svg' %}" style="width: 48px; height: auto;">
+  <div class="media-body">
+    <h5 class="mt-0">Create Table</h5>
+    <div class="text">Create new Teams or Course Holes table.</div>
+  </div>
+</a>
+
+<a class="media" href="javascript:addPasswords();">
+  <img class="d-flex mr-3" src="{% static_reload 'site/img/svg/AddPasswords.svg' %}" style="width: 48px; height: auto;">
+  <div class="media-body">
+    <h5 class="mt-0">Create Passwords</h5>
+    <div class="text">Create and add random passwords for all team records that need a password.</div>
+  </div>
+</a>
+
+<h3>Miscellaneous</h3>
+
+<a class="media" href="javascript:archiveTournament();">
+  <img class="d-flex mr-3" src="{% static_reload 'site/img/svg/Archive.svg' %}" style="width: 48px; height: auto;">
+  <div class="media-body">
+    <h5 class="mt-0">Archive Tournament</h5>
+    <div class="text">Save and archive the tournament results.</div>
+  </div>
+</a>
+
+<a class="media" href="/admin">
+  <img class="d-flex mr-3" src="{% static_reload 'site/img/svg/AdminDashboard.svg' %}" style="width: 48px; height: auto;">
+  <div class="media-body">
+    <h5 class="mt-0">Admin Dashboard</h5>
+    <div class="text">Goto admin dashboard.</div>
+  </div>
+</a>
+
+<a class="media" href="javascript:logOut();">
+  <img class="d-flex mr-3" src="{% static_reload 'site/img/svg/Logout.svg' %}" style="width: 48px; height: auto;">
+  <div class="media-body">
+    <h5 class="mt-0">Admin Logout</h5>
+    <div class="text">Log out as admin.</div>
+  </div>
+</a>
+
+<div style="height: 50px;"></div>
+
+<form id="admin-actions-form" method="post" action="" enctype="multipart/form-data">
+{% csrf_token %}
+{{ form|crispy }}
+</form>
+
+{% endblock %}
+
+{% block post-script %}
+<script>
+$(document).ready(function() {
+	$('#id_action').val('');
+});
+function debugFunction() {
+	$('#id_action').val('debug-action');
+	$('#admin-actions-form').submit();
+};
+function addPasswords() {
+	let d = new Dialog();
+	d.Launch({
+		Title: 'Create random passwords?',
+		Icon: 'question',
+		Content: '<p>Create random passwords for all teams that need passwords?</p><p>NOTE: This action will not create random passwords for teams that already have passwords.</p>',
+		Buttons: [
+			{Name: 'Yes', Function: function() {
+				d.Close(); 
+				$('#id_action').val('create-random-passwords');
+				$('#admin-actions-form').submit();
+			}},
+			{Name: 'No', Function: function() {d.Close();}},
+		],
+	});
+};
+function compileCache() {
+	let d = new Dialog();
+	d.Launch({
+		Title: 'Compile cache?',
+		Icon: 'question',
+		Height: 350,
+		Content: '<p>The cache is a database table where common, static data from mutiple database tables is consolidated and stored for on-demand, quick access.</p><p>Do you want to compile the cache?</p>',
+		Buttons: [
+			{Name: 'Yes', Function: function() {
+				d.Close(); 
+				$('#id_action').val('compile-cache');
+				$('#admin-actions-form').submit();
+			}},
+			{Name: 'No', Function: function() {d.Close();}},
+		],
+	});
+};
+function logOut() {
+	let d = new Dialog();
+	d.Launch({
+		Title: 'Log out?',
+		Icon: 'question',
+		Content: '<p>Log out now?</p>',
+		Buttons: [
+			{Name: 'Yes', Function: function() {
+				d.Close(); 
+				window.location.href = "{% url 'user-logout' %}";
+			}},
+			{Name: 'No', Function: function() {d.Close();}},
+		],
+	});
+};
+
+function makeResultsVisible() {
+	let d = new Dialog();
+	d.Launch({
+		Title: 'Make Results Visible?',
+		Icon: 'question',
+		Height: 350,
+		Content: '<p>Do you want teams to be able to view the final standings?</p>',
+		Buttons: [
+			{Name: 'Yes', Function: function() {
+				d.Close(); 
+				$('#id_action').val('make-results-visible');
+				$('#admin-actions-form').submit();
+			}},
+			{Name: 'No', Function: function() {d.Close();}},
+		],
+	});
+};
+
+function makeResultsInvisible() {
+	let d = new Dialog();
+	d.Launch({
+		Title: 'Make Results Invisible?',
+		Icon: 'question',
+		Height: 350,
+		Content: '<p>Do you want to prohibit teams from viewing the final standings?</p>',
+		Buttons: [
+			{Name: 'Yes', Function: function() {
+				d.Close(); 
+				$('#id_action').val('make-results-invisible');
+				$('#admin-actions-form').submit();
+			}},
+			{Name: 'No', Function: function() {d.Close();}},
+		],
+	});
+};
+
+function enableScorecardEditing() {
+	let d = new Dialog();
+	d.Launch({
+		Title: 'Enable Scorecard Editing?',
+		Icon: 'question',
+		Height: 350,
+		Content: '<p>Do you want to allow teams to be able to edit their scorecards?</p>',
+		Buttons: [
+			{Name: 'Yes', Function: function() {
+				d.Close(); 
+				$('#id_action').val('enable-scorecard-editing');
+				$('#admin-actions-form').submit();
+			}},
+			{Name: 'No', Function: function() {d.Close();}},
+		],
+	});
+};
+
+function disableScorecardEditing() {
+	let d = new Dialog();
+	d.Launch({
+		Title: 'Disable Scorecard Editing?',
+		Icon: 'question',
+		Height: 350,
+		Content: '<p>Do you want to prohibit teams from editing their scorecards?</p>',
+		Buttons: [
+			{Name: 'Yes', Function: function() {
+				d.Close(); 
+				$('#id_action').val('disable-scorecard-editing');
+				$('#admin-actions-form').submit();
+			}},
+			{Name: 'No', Function: function() {d.Close();}},
+		],
+	});
+};
+
+function enableTeamAccess() {
+	let d = new Dialog();
+	d.Launch({
+		Title: 'Enable Team Access?',
+		Icon: 'question',
+		Height: 350,
+		Content: '<p>Do you want to enable teams to login or access restricted team content?</p>',
+		Buttons: [
+			{Name: 'Yes', Function: function() {
+				d.Close(); 
+				$('#id_action').val('enable-team-access');
+				$('#admin-actions-form').submit();
+			}},
+			{Name: 'No', Function: function() {d.Close();}},
+		],
+	});
+};
+
+function disableTeamAccess() {
+	let d = new Dialog();
+	d.Launch({
+		Title: 'Disable Team Access?',
+		Icon: 'question',
+		Height: 350,
+		Content: '<p>Do you want to prohibit teams from logging in and accessing restricted team content?</p>',
+		Buttons: [
+			{Name: 'Yes', Function: function() {
+				d.Close(); 
+				$('#id_action').val('disable-team-access');
+				$('#admin-actions-form').submit();
+			}},
+			{Name: 'No', Function: function() {d.Close();}},
+		],
+	});
+};
+
+function enableLeaderBoard() {
+	let d = new Dialog();
+	d.Launch({
+		Title: 'Enable Leader Board?',
+		Icon: 'question',
+		Height: 350,
+		Content: '<p>Do you want to make the scorecard\'s leader board visible?</p>',
+		Buttons: [
+			{Name: 'Yes', Function: function() {
+				d.Close(); 
+				$('#id_action').val('enable-leader-board');
+				$('#admin-actions-form').submit();
+			}},
+			{Name: 'No', Function: function() {d.Close();}},
+		],
+	});
+};
+
+function disableLeaderBoard() {
+	let d = new Dialog();
+	d.Launch({
+		Title: 'Disable Leader Board?',
+		Icon: 'question',
+		Height: 350,
+		Content: '<p>Do you want to hide the scorecard\'s leader board?</p>',
+		Buttons: [
+			{Name: 'Yes', Function: function() {
+				d.Close(); 
+				$('#id_action').val('disable-leader-board');
+				$('#admin-actions-form').submit();
+			}},
+			{Name: 'No', Function: function() {d.Close();}},
+		],
+	});
+};
+
+function selectTeamScorecard() {
+	if ("{{ request.session.team.name }}".length > 0) {
+		window.location.href = "{% url 'score-card' %}";
+		return;
+	}
+	let HTML = [];
+	HTML.push(`<div id="SelectAnotherTeamValue" style="display: none;"></div>`);
+	{% for team_name,team in request.session.cache.team|sortkeys %}
+	HTML.push(`<a class="btn btn-outline-secondary" href="javascript:$('#SelectAnotherTeamValue').html('{{ team_name }}');" style="width: 100%; margin-bottom: 2px; text-align: left;">`);
+	HTML.push(`<div style="font-weight: bold;">Team {{ team_name }}</div>`);
+	HTML.push(`<div style="font-size: 12px; line-height: 12px;">{{ team.player1 }}<br>{{ team.player2 }}<br>{{ team.player3 }}</div>`);
+	HTML.push(`</a>`)
+	{% endfor %}
+	let html = HTML.join('\n');
+	let d = new Dialog();
+	d.Launch({
+		Title: 'Select Team',
+		Content: html,
+		Height: 500,
+		Buttons: [
+			{Name: 'Select', Function: function() {
+				d.Close();
+				let team_name = $('#SelectAnotherTeamValue').html();
+				window.location.href = `{% url 'score-card' %}/${team_name}`;
+			}},
+			{Name: 'Cancel', Function: function() {d.Close();}},
+		],
+	});
+};
+
+function archiveTournament() {
+	let d = new Dialog();
+	d.Launch({
+		Title: 'Archive Tournament?',
+		Icon: 'question',
+		Height: 350,
+		Content: '<p>Do you want to save and archive tournament results?</p>',
+		Buttons: [
+			{Name: 'Yes', Function: function() {
+				d.Close(); 
+				$('#id_action').val('archive-tournament');
+				$('#admin-actions-form').submit();
+			}},
+			{Name: 'No', Function: function() {d.Close();}},
+		],
+	});
+};
+
+
+
+</script>
+{% endblock %}
+

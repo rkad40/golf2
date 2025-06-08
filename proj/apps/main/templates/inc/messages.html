@@ -1,0 +1,22 @@
+{% load static %}
+{% load assets %}
+
+{% if messages %}
+	{% for message in messages %}
+	<div class="flash messages" style="padding: 0 0 0 0;">
+		<div class="flash messages" style="padding: 0; margin: 0;">
+			<div class="alert alert-{{ message.tags|alert:'type' }} alert-dismissible fade show"
+				style="width: 100%; margin: 0 0 0 0;" role="alert">
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true"><i class="fas fa-times"></i></span>
+				</button>
+				<div class="text">
+				<img src="{% http_static_url %}{{ message.tags|alert:'img' }}"
+					style="position: relative; left: -3px; top: -3px;">
+				<strong>{{ message.tags|alert:'label' }}</strong>: {{ message | safe }}
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+{% endif %}

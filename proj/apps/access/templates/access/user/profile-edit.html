@@ -1,0 +1,17 @@
+{% extends "site/base.html" %}
+{% load static %}
+{% load main.templatetags.assets %}
+{% get_static_prefix as STATIC_PREFIX %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+    <h1>Edit User Profile</h1>
+{% endblock %}
+
+{% block content %}
+	<form method="post">
+		{% csrf_token %}
+		{{ form|crispy }}
+	<button class="btn btn-primary" type="submit">Save</button> <a class="btn btn-primary" href="{% url 'user-change-password' %}">Change Password</a>
+	</form>
+{% endblock %}

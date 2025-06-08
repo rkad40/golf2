@@ -1,0 +1,1471 @@
+{% extends "base.html" %}
+{% load static %}
+{% load assets %}
+{% load crispy_forms_tags %}
+
+{% block head-styles %}
+	<style>
+	body
+	{
+		font-family: Arial, Open Sans;
+		font-size: 14px;
+	}
+	.Title
+	{
+		font-family: Open Sans; font-size: 100%; font-weight: bold;
+	}
+	#Main * {
+		font-family: Arial, Open Sans;
+	}
+	#Banner
+	{
+		border-collapse: collapse;
+		border: 0px;
+	}
+	#ContentContainer {
+		padding: 0px 3px;
+		margin-top: -20px;
+	}
+	.PageForm
+	{
+		border-collapse: collapse;
+		border: 5px solid #0f344f;
+	}
+	.PageForm td
+	{
+		border-collapse: collapse;
+		border: 1px solid #0f344f;
+	}
+	.NoBorder
+	{
+		border-collapse: collapse;
+		border: 0px;
+	}
+	.NoBorder td
+	{
+		border-collapse: collapse;
+		border: 0px;
+	}
+	.DialogWrapper .Button {
+		background-color: #666;
+		color: white;
+		height: 30px;
+	}
+
+	a.button:link {font-weight: bold; text-decoration: none; color: #0000ff;}
+	a.button:visited {font-weight: bold; text-decoration: none; color: #0000ff;}
+	a.button:hover {font-weight: bold; text-decoration: underline; color: #0000ff;}
+
+	a.Question:link {font-size: 12px; text-decoration: none; color: #ccc;}
+	a.Question:visited {font-size: 12px; text-decoration: none; color: #ccc;}
+	a.Question:hover {font-size: 12px; text-decoration: none; color: #ccc;}
+
+	.IsBest {
+		text-decoration: none;
+	}
+	.NotBest {
+		text-decoration: line-through;
+	}
+
+	.ColumnHeader {font-size: 12px; line-height: 12px; text-align: center; background-color: #555; color: #fff; font-weight: 800; border: 1px solid #FFF !important;}
+	.Cell {font-size: 12px !important; text-align: center; background-color: #e8e8e8; color: #000; font-weight: 400 !important; border: 1px solid #FFF !important;}
+	.Cell.Me {font-weight: 800 !important; background-color: #aaa; color: #000 !important;}
+	.Cell.Not-Me a:link {font-size: 12px !important;}
+	.HolePlayed {background-color: #66707f; }
+	.HoleNotPlayed {background-color: #d8d8d8; }
+	.Header
+	{
+		font-family: Arial, Open Sans; 
+		font-size: 18px; font-weight: bold; color: #ffffff; 
+		margin: 2px 2px 2px 2px;
+		padding: 3px 2px 3px 2px;
+		background-color: #0f344f;
+		border: 2px solid #ffffff;
+		text-shadow: 2px 2px 2px #000;	
+	}
+	.Header2
+	{
+		font-family: Arial, Open Sans; 
+		font-size: 18px; font-weight: bold; color: #ffffff; 
+		padding: 3px 2px 3px 2px;
+		background-color: #0f344f;
+		text-shadow: 2px 2px 2px #000;	
+		width: 100%;
+	}
+	.CardWrapper {
+		border: 1px solid #0f344f;
+	}
+	.RegularText {
+		font-size: 16px;
+	}
+	.ScoreCard
+	{
+		font-family: Arial, Open Sans;
+		width: 75px;
+		height: 80px;
+		text-align: center;
+		margin: 2px;
+		border-radius: 10px;
+		cursor: pointer;
+		border: 3px solid #0f344f;
+		background: rgb(255,255,255);
+		background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(247,247,247,1) 100%);
+		color: #000000 !important;
+	}
+	.ScoreCard .d0
+	{
+		font-family: Arial, Open Sans; font-size: 14px; font-weight: bold; color: #ffffff; 
+		background-color: #0f344f; text-align: center; vertical-align: top;
+		width: 65px; position: relative; top: 0px; left: 0px;
+		border-radius: 7px 7px 0 0; margin: 2px 2px 2px 2px;
+	}
+	.ScoreCard .d1
+	{
+		font-family: Arial, Open Sans; font-size: 14px; font-weight: bold; 
+		text-align: center; vertical-align: top;
+		width: 70px; position: absolute; top: 25px; left: 4px;
+	}
+	.ScoreCard .d2
+	{
+		font-family: Arial, Open Sans; font-size: 10px; font-weight: normal; 
+		text-align: center; vertical-align: top;
+		width: 70px; position: absolute; top: 37px; left: 4px;
+	}
+	.ScoreCard .d3
+	{
+		font-family: Arial, Open Sans; font-size: 24px; font-weight: 700; 
+		text-align: center; vertical-align: top;
+		width: 70px; position: absolute; top: 45px; left: 4px;
+	}
+	.TeamSelectStyle 
+	{
+		height: 200px !important;
+		margin: auto;
+	}
+	.btn-scorecard-xxx {
+		background-color: #ccc;
+		color: #000;
+	}
+	.btn-scorecard-xxx:hover {
+		background-color: #aaa;
+	}
+	table.team-info * {
+		font-family: Arial, Open Sans;
+	}
+	table.team-info {
+		width: 100%;
+	}
+	table.team-info th {
+		background-color: #888;
+		color: #fff;
+		text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.85);
+	}
+	table.team-info td {
+		padding-bottom: 10px;
+	}
+	#HoleStatus {
+		width: 100%;
+		table-layout: fixed;
+		background-color: #e7e7e7;
+	}
+	#HoleStatus .HoleStatus {
+		background-color: #aaa;
+		height: 15px;
+		border: 2px solid #e7e7e7;
+	}
+	#HoleStatus .HoleStatus.Active {
+		background-color: #3d668f;
+	}
+
+	.help h3 {font-weight: 900 !important; font-size: 24px !important; line-height: 26px !important; color: #0f344f !important; margin-top: 20px; margin-bottom: 10px !important;}
+	.help h3:first-child {margin-top: 0px !important;}
+
+	#StatusBar {
+		background: none repeat scroll 0 0 #000000e0;
+		bottom: 0;
+		padding: 0;
+		margin: 0;
+		position: fixed;
+		width: 100%;
+		z-index: 10;
+		height: 40px;
+		display: none;
+		left: 0;
+	}
+
+	#StatusBar .Text {
+		color: #fff;
+		display: block;
+		font-size: 14px;
+		font-weight: 400;
+		margin: 0;
+		padding: 10px 0 0 0;
+		text-align: center;
+	}
+	</style>	
+{% endblock %}
+
+{% block content %}
+<section id="TestHook" style="display: none;">score-card</section>
+
+{% if can_edit %}
+
+	<form method="post" enctype="multipart/form-data">
+
+	<div style="height:2px; background-color: #fff;"></div>
+
+	<div style="height:8px;"></div>
+		
+	<div id="Main" style="position: relative; top:-5px;">
+
+		<table class="PageForm" style="width:100%;">
+			<tr style="vertical-align:top;">
+				<td class="Header" style="text-align:center; font-size: 18px;">Team</td>    
+				<td class="Header" style="text-align:center; font-size: 18px;">Hdcp</td>
+				<td class="Header" style="text-align:left; font-size: 18px;">Players</td> 
+			</tr>
+			<tr style="vertical-align:top">
+				<td id="TeamID" style="font-weight: bold; text-align: center; vertical-align: middle; background-color: #e7e7e7;">
+					<div id="Team" style="font-size: 20px; color: #444;"></div>
+				</td>
+				<td id="TeamID" style="font-weight: bold; text-align: center; vertical-align: middle; background-color: #e7e7e7;">
+					<div id="Handicap" style="font-size: 20px; color: #444;"></div>
+				</td>
+				<td id="TeamID" style="font-weight: bold; font-size:70%; padding-left: 6px; background-color: #e7e7e7;">
+					<div id="Player1" style="font-size: 16px; line-height: 18px; color: #222;">&nbsp;</div>
+					<div id="Player2" style="font-size: 16px; line-height: 18px; color: #222;">&nbsp;</div>
+					<div id="Player3" style="font-size: 16px; line-height: 18px; color: #222;">&nbsp;</div>
+				</td>
+			</tr>
+			{% if user.is_staff %}
+			<tr style="vertical-align:top; background-color: #e7e7e7;">
+				<td style="font-weight: bold; text-align: center; vertical-align: middle; padding: 2px;" colspan="3"><a class="btn btn-primary btn-sm" href="javascript:SelectAnotherTeam();" style="width: 100%;"><i class="fas fa-users"></i> Select Another Team</a></td>    
+			</tr>
+			{% endif %}
+		</table>
+
+		<div style="height:5px;"></div>
+
+		<div class="CardWrapper" style="background-color: #e7e7e7; border: 5px solid #0f344f;">
+		<table class="PageForm" style="width:100%; position: relative;">
+			<tr style="vertical-align:top;">
+				<td class="Header" style="text-align:left; font-size: 18px;">
+				Scorecard 
+				<div style="position: absolute; top:  6px; right: 0px; font-size: 14px; color: #ccc;"><a class="Question" href="javascript:ScoreHelp();"><i class="fas fa-question-circle"></i></a>
+				<div style="position: absolute; top: 35px; right: 0px; font-size: 14px; color: #ccc;"><a class="Question" href="javascript:AdjustedScoreHelp();"><i class="fas fa-question-circle"></i></a>
+				</div>
+				</td>    
+			</tr>
+		</table>
+
+				<table style="border-collapse: collapse;border: 1px solid #FFF; width: 100%;">
+					<tr> 
+						<td class="ColumnHeader">Holes<br>Played</td> 
+						<td class="ColumnHeader">Holes<br>Left</td> 
+						<td class="ColumnHeader">Raw<br>Score</td> 
+						<td class="ColumnHeader">Hdcp</td> 
+						<td class="ColumnHeader">Adj<br>Score</td> 
+					</tr>
+					<tr> 
+						<td id="TeamHolesPlayed" class="Cell" style="font-weight: 900 !important; background-color: #aaa;">&nbsp;</td> 
+						<td id="TeamHolesLeft"   class="Cell" style="font-weight: 900 !important; background-color: #aaa;">&nbsp;</td> 
+						<td id="TeamRawScore"    class="Cell" style="font-weight: 900 !important; background-color: #aaa;">&nbsp;</td> 
+						<td id="TeamHandicap"    class="Cell" style="font-weight: 900 !important; background-color: #aaa;">&nbsp;</td> 
+						<td id="TeamAdjScore"    class="Cell" style="font-weight: 900 !important; background-color: #aaa;">&nbsp;</td> 
+					</tr>
+				</table>		
+		 
+		<div>
+		<table id="HoleStatus">
+		<tr>
+		<td id="HoleStatus1" class="HoleStatus"></td>
+		<td id="HoleStatus2" class="HoleStatus"></td>
+		<td id="HoleStatus3" class="HoleStatus"></td>
+		<td id="HoleStatus4" class="HoleStatus"></td>
+		<td id="HoleStatus5" class="HoleStatus"></td>
+		<td id="HoleStatus6" class="HoleStatus"></td>
+		<td id="HoleStatus7" class="HoleStatus"></td>
+		<td id="HoleStatus8" class="HoleStatus"></td>
+		<td id="HoleStatus9" class="HoleStatus"></td>
+		<td id="HoleStatus10" class="HoleStatus"></td>
+		<td id="HoleStatus11" class="HoleStatus"></td>
+		<td id="HoleStatus12" class="HoleStatus"></td>
+		<td id="HoleStatus13" class="HoleStatus"></td>
+		<td id="HoleStatus14" class="HoleStatus"></td>
+		<td id="HoleStatus15" class="HoleStatus"></td>
+		<td id="HoleStatus16" class="HoleStatus"></td>
+		<td id="HoleStatus17" class="HoleStatus Active"></td>
+		<td id="HoleStatus18" class="HoleStatus"></td>
+		</tr>
+		</table>
+		</div>
+
+		<div class="owl-carousel owl-theme">
+		<div id="ScoreCard-1"  hole="1"  class="ScoreCard"><div class="d0">Hole 1</div ><div id="HolePar-1"  class="d1"></div><div id="HoleDist-1"  class="d2"></div><div id="HoleScore-1"  class="d3"></div></div>
+		<div id="ScoreCard-2"  hole="2"  class="ScoreCard"><div class="d0">Hole 2</div ><div id="HolePar-2"  class="d1"></div><div id="HoleDist-2"  class="d2"></div><div id="HoleScore-2"  class="d3"></div></div>
+		<div id="ScoreCard-3"  hole="3"  class="ScoreCard"><div class="d0">Hole 3</div ><div id="HolePar-3"  class="d1"></div><div id="HoleDist-3"  class="d2"></div><div id="HoleScore-3"  class="d3"></div></div>
+		<div id="ScoreCard-4"  hole="4"  class="ScoreCard"><div class="d0">Hole 4</div ><div id="HolePar-4"  class="d1"></div><div id="HoleDist-4"  class="d2"></div><div id="HoleScore-4"  class="d3"></div></div>
+		<div id="ScoreCard-5"  hole="5"  class="ScoreCard"><div class="d0">Hole 5</div ><div id="HolePar-5"  class="d1"></div><div id="HoleDist-5"  class="d2"></div><div id="HoleScore-5"  class="d3"></div></div>
+		<div id="ScoreCard-6"  hole="6"  class="ScoreCard"><div class="d0">Hole 6</div ><div id="HolePar-6"  class="d1"></div><div id="HoleDist-6"  class="d2"></div><div id="HoleScore-6"  class="d3"></div></div>
+		<div id="ScoreCard-7"  hole="7"  class="ScoreCard"><div class="d0">Hole 7</div ><div id="HolePar-7"  class="d1"></div><div id="HoleDist-7"  class="d2"></div><div id="HoleScore-7"  class="d3"></div></div>
+		<div id="ScoreCard-8"  hole="8"  class="ScoreCard"><div class="d0">Hole 8</div ><div id="HolePar-8"  class="d1"></div><div id="HoleDist-8"  class="d2"></div><div id="HoleScore-8"  class="d3"></div></div>
+		<div id="ScoreCard-9"  hole="9"  class="ScoreCard"><div class="d0">Hole 9</div ><div id="HolePar-9"  class="d1"></div><div id="HoleDist-9"  class="d2"></div><div id="HoleScore-9"  class="d3"></div></div>
+		<div id="ScoreCard-10" hole="10" class="ScoreCard"><div class="d0">Hole 10</div><div id="HolePar-10" class="d1"></div><div id="HoleDist-10" class="d2"></div><div id="HoleScore-10" class="d3"></div></div>
+		<div id="ScoreCard-11" hole="11" class="ScoreCard"><div class="d0">Hole 11</div><div id="HolePar-11" class="d1"></div><div id="HoleDist-11" class="d2"></div><div id="HoleScore-11" class="d3"></div></div>
+		<div id="ScoreCard-12" hole="12" class="ScoreCard"><div class="d0">Hole 12</div><div id="HolePar-12" class="d1"></div><div id="HoleDist-12" class="d2"></div><div id="HoleScore-12" class="d3"></div></div>
+		<div id="ScoreCard-13" hole="13" class="ScoreCard"><div class="d0">Hole 13</div><div id="HolePar-13" class="d1"></div><div id="HoleDist-13" class="d2"></div><div id="HoleScore-13" class="d3"></div></div>
+		<div id="ScoreCard-14" hole="14" class="ScoreCard"><div class="d0">Hole 14</div><div id="HolePar-14" class="d1"></div><div id="HoleDist-14" class="d2"></div><div id="HoleScore-14" class="d3"></div></div>
+		<div id="ScoreCard-15" hole="15" class="ScoreCard"><div class="d0">Hole 15</div><div id="HolePar-15" class="d1"></div><div id="HoleDist-15" class="d2"></div><div id="HoleScore-15" class="d3"></div></div>
+		<div id="ScoreCard-16" hole="16" class="ScoreCard"><div class="d0">Hole 16</div><div id="HolePar-16" class="d1"></div><div id="HoleDist-16" class="d2"></div><div id="HoleScore-16" class="d3"></div></div>
+		<div id="ScoreCard-17" hole="17" class="ScoreCard"><div class="d0">Hole 17</div><div id="HolePar-17" class="d1"></div><div id="HoleDist-17" class="d2"></div><div id="HoleScore-17" class="d3"></div></div>
+		<div id="ScoreCard-18" hole="18" class="ScoreCard"><div class="d0">Hole 18</div><div id="HolePar-18" class="d1"></div><div id="HoleDist-18" class="d2"></div><div id="HoleScore-18" class="d3"></div></div>
+		</div>
+
+
+
+		<table class="NoBorder" style="width:100%;">
+			<tr>
+			<td style="text-align:left; padding-left: 2px;">
+				<a class="btn btn-sm btn-primary btn-scorecard" style="width: 100%; padding: 4px 5px; border-radius: 5px;" id="EnterScore" href="javascript:ScoreInputDialog();"><i class="fas fa-pen"></i> Input Score</a>
+			</td>
+			<td style="text-align:center;">
+				<a class="btn btn-sm btn-primary btn-scorecard" style="width: 100%; min-width: 25px; padding: 4px 5px; border-radius: 5px;" id="Prev" style="width:50px;"><i class="fas fa-caret-left"></i></a>
+			</td>
+			<td style="text-align:center;">
+				<a class="btn btn-sm btn-primary btn-scorecard" style="width: 100%; min-width: 25px; padding: 4px 5px; border-radius: 5px;" id="Next" style="width:50px;"><i class="fas fa-caret-right"></i></a>
+			</td>
+			<td style="text-align:right; padding-right: 2px;">
+				<a class="btn btn-sm btn-primary btn-scorecard" style="width: 100%; padding: 4px 5px; border-radius: 5px;" id="UserSelectHole"><i class="fas fa-flag"></i> Go to Hole</a>
+			</td>
+			</tr>
+			<tr>
+			<td style="text-align:center; padding-left: 2px; padding-right: 2px;" colspan="4">
+				<a class="btn btn-sm btn-danger btn-scorecard" style="width: 100%; padding: 4px 5px; border-radius: 5px; display: none;" id="SpecialAwardPlayerSelect" href="javascript:EnterSpecialAward();"><i class="fas fa-star"></i> <div class="text" style="display: inline-block; font-size: 14px;"></div> <i class="fas fa-star"></i></a>
+			</td>
+			</tr>
+		</table>
+		
+		<div style="height:2px;"></div>
+		
+		</div>
+
+		<div style="height:5px;"></div>
+
+		
+		<table class="PageForm" style="width:100%; background-color: #e7e7e7; position: relative;">
+			<tr style="vertical-align:top;">
+				<td class="Header" style="text-align:left; font-size: 18px;">
+				Leader Board
+				<div style="position: absolute; top:  6px; right: 6px; font-size: 14px; color: #ccc;">
+				<a class="Question" href="javascript:LeaderBoardHelp();"><i class="fas fa-question-circle"></i></a>
+				</div>		
+				</td>    
+			</tr>
+			<tr>
+				<td><div id="LeaderBoard" style="font-size:12px; min-height: 10px;"></div></td>
+			</tr>
+		</table>
+
+		<div style="height:5px;"></div>
+		
+		<table class="PageForm" style="width:100%; background-color: #e7e7e7;">
+			<tr style="vertical-align:top;">
+				<td class="Header" style="text-align:left; font-size: 18px;">Hole Awards</td>    
+			</tr>
+			<tr>
+				<td><div id="HoleAwards" style="font-size:12px;">&nbsp;</div></td>
+			</tr>
+		</table>
+
+		<div style="height:5px;"></div>
+		
+		<table class="PageForm" style="width:100%; background-color: #e7e7e7;">
+			<tr style="vertical-align:top;">
+				<td class="Header" style="text-align:left; font-size: 18px;">Notes</td>    
+			</tr>
+			<tr>
+				<td><div id="Notes" style="font-size:14px">&nbsp;</div></td>
+			</tr>
+		</table>
+
+	</div>
+
+	<div style="width: 100%; padding: 0.5vw; background-color: #a0a0a0; display: none;">
+	<div style="width: 100%; margin: auto; text-align: center; font-weight: 600;">NXP Web Tool</div>
+	{% csrf_token %}
+	{{ form }}
+	</div>
+	<div style="height: 0px;"></div>
+	<a class="btn btn-primary btn-sm" href="javascript:ExecuteAjaxTransaction(false);" style="width: 100%;"><i class="fas fa-sync-alt"></i> Refresh</a>
+	<div style="height: 25px;"></div>
+	</form>
+
+
+	<div id="StatusBar">
+	<div class="Text"><i class="fas fa-check-circle"></i> Scorecard data saved</div>
+	</div>
+
+{% else %}
+<div style="padding: 5px;">
+<div class="alert alert-danger" role="alert">
+<p><i class="fas fa-exclamation-triangle"></i> <strong>Oh snap!</strong> Looks like you just bladed it, <i>again</i>!</p>
+<p style="text-align: center;"><img style="max-width: 80%;" src="{% media 'Images/Error.png' %}"></p>
+<p>We're sorry.  Scorecard input is currently not enabled.</p>
+<p>Either the tournament hasn't begun yet, or it is already completed.</p>
+<p>You might check <a href="{% url 'results' %}">Tournament Results</a> to see if the final results are in the books yet.</p>
+</div>
+</div>
+<div style="height: 300px;"></div>
+{% endif %}
+
+{% endblock %}
+
+{% block post-script %}
+	<script>
+	
+	function csrfSafeMethod(method) {
+		// these HTTP methods do not require CSRF protection
+		return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+	};
+	var csrftoken = $("[name=csrfmiddlewaretoken]").val();
+
+	var CourseInfo2 = {{ request.session.cache.hole|json|safe }};
+
+	var TeamInfo = {
+		Name: "{{ team.name|safe }}",
+		Valid: true,
+		Players: 
+		[
+			"{{ team.player1|safe }}",
+			"{{ team.player2|safe }}",
+			"{{ team.player3|safe }}",
+		],
+		StartHole: {{ team.start_hole }},
+		Handicap: {{ team.str_handicap|safe }},
+		Score:
+		{
+			 1: {RawScore: {% if team.hole1  %}{{ team.hole1  }}{% else %}null{% endif %}, RelScore:  "", Valid: 0},
+			 2: {RawScore: {% if team.hole2  %}{{ team.hole2  }}{% else %}null{% endif %}, RelScore:  "", Valid: 0},
+			 3: {RawScore: {% if team.hole3  %}{{ team.hole3  }}{% else %}null{% endif %}, RelScore:  "", Valid: 0},
+			 4: {RawScore: {% if team.hole4  %}{{ team.hole4  }}{% else %}null{% endif %}, RelScore:  "", Valid: 0},
+			 5: {RawScore: {% if team.hole5  %}{{ team.hole5  }}{% else %}null{% endif %}, RelScore:  "", Valid: 0},
+			 6: {RawScore: {% if team.hole6  %}{{ team.hole6  }}{% else %}null{% endif %}, RelScore:  "", Valid: 0},
+			 7: {RawScore: {% if team.hole7  %}{{ team.hole7  }}{% else %}null{% endif %}, RelScore:  "", Valid: 0},
+			 8: {RawScore: {% if team.hole8  %}{{ team.hole8  }}{% else %}null{% endif %}, RelScore:  "", Valid: 0},
+			 9: {RawScore: {% if team.hole9  %}{{ team.hole9  }}{% else %}null{% endif %}, RelScore:  "", Valid: 0},
+			10: {RawScore: {% if team.hole10 %}{{ team.hole10 }}{% else %}null{% endif %}, RelScore:  "", Valid: 0}, 
+			11: {RawScore: {% if team.hole11 %}{{ team.hole11 }}{% else %}null{% endif %}, RelScore:  "", Valid: 0},
+			12: {RawScore: {% if team.hole12 %}{{ team.hole12 }}{% else %}null{% endif %}, RelScore:  "", Valid: 0}, 
+			13: {RawScore: {% if team.hole13 %}{{ team.hole13 }}{% else %}null{% endif %}, RelScore:  "", Valid: 0},
+			14: {RawScore: {% if team.hole14 %}{{ team.hole14 }}{% else %}null{% endif %}, RelScore:  "", Valid: 0},
+			15: {RawScore: {% if team.hole15 %}{{ team.hole15 }}{% else %}null{% endif %}, RelScore:  "", Valid: 0},
+			16: {RawScore: {% if team.hole16 %}{{ team.hole16 }}{% else %}null{% endif %}, RelScore:  "", Valid: 0},
+			17: {RawScore: {% if team.hole17 %}{{ team.hole17 }}{% else %}null{% endif %}, RelScore:  "", Valid: 0},
+			18: {RawScore: {% if team.hole18 %}{{ team.hole18 }}{% else %}null{% endif %}, RelScore:  "", Valid: 0},
+		},
+	};
+
+	for (let Hole = 1; Hole <= 18; Hole++) {
+		let HoleKey = String(Hole);
+		if (TeamInfo.Score[Hole].RawScore > 0) {
+			let rawScore = TeamInfo.Score[Hole].RawScore;
+			let par = CourseInfo2[HoleKey].par;
+			let relScore = TeamInfo.Score[Hole].RawScore - par;
+			if (relScore >= 0) {relScore = `+${relScore}`;}
+			else {relScore = `${relScore}`;};
+			TeamInfo.Score[Hole].RelScore = relScore;
+			TeamInfo.Score[Hole].Valid = 1;
+		}
+	}
+
+	var SelectedHole = 1;
+	var SelectedHoleKey = String(SelectedHole);
+	var EnteredScore = "";
+	var DebugMode = false;
+
+	function Site() {
+		// Attributes
+		var $ThisSite = this;
+		this.SiteURL = window.location.href.split('?')[0];
+		this.Spreadsheet = null;
+		this.OfflineMode = this.SiteURL.startsWith("file") ? true : false;
+		this.Data = {};
+		
+		// IsMobile()
+		this.IsMobile = function() {
+			if(window.innerWidth <= 800)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		};
+		
+		this.Initialize = function() {
+			var GetData = $("#id_data").val();
+			if (GetData.length > 0 && GetData != '__#SendData#__')
+			{
+				$ThisSite.Data = JSON.parse(atob(GetData));
+			}
+			else
+			{
+				$ThisSite.Data = 
+				{
+					IsLoggedIn: 0,
+				};
+			}
+			$("#Password").keypress
+			(
+				function(e)
+				{
+					if(e.keyCode == 13)
+					{
+						$ThisSite.LoginSubmitFunction();
+						return false;
+					};
+				}
+			);
+			$("#SearchText").keypress
+			(
+				function(e)
+				{
+					if(e.keyCode == 13)
+					{
+						$ThisSite.SearchSubmitFunction();
+						return false;
+					};
+				}
+			);
+		};
+		
+		this.DataRequest = function() {
+			$ThisSite.FreezeData();
+			let frozenData = $('#id_data').val();
+			console.log(`frozenData=${frozenData}`);
+			
+			let postData = {Data: frozenData};
+			SpinMessage('Communicating with server ...')
+			$.ajax({
+				url: "{{ update_url }}",
+				type: 'POST',
+				data: postData,
+				dataType: 'json',
+				success: function (responseData) {
+					if (responseData.valid) {
+						let leaderBoardData = responseData.leaderBoard;
+						$ThisSite.UpdateLeaderBoard(leaderBoardData);
+						let ourTeamData = responseData.ourTeamData;
+						$ThisSite.UpdateOurTeamData(ourTeamData);
+						let holeAwards = responseData.awards;
+						$ThisSite.UpdateHoleAwards(holeAwards);
+						let now = new Date();
+						let dt = now.toLocaleString().replace(',', ' at');
+						if ('error' in responseData)
+						{
+							let d = new Dialog();
+							d.Error(responseData.error);
+						} 
+						if ('warning' in responseData)
+						{
+							let d = new Dialog();
+							d.Warning(responseData.warning);
+						}
+						if ('notes' in responseData)
+						{
+							let d = new Dialog();
+							d.Info(responseData.notes);
+						}
+						if (responseData.writeOccurred) {
+							showToast(`<i class="fas fa-check-circle"></i> Scorecard saved`);
+							LogMessage(`Scorecard saved on ${dt}.`);
+						} else {
+							showToast(`<i class="fas fa-check-circle"></i> Scorecard refreshed`);
+							LogMessage(`Scorecard refreshed on ${dt}.`);
+						}
+					} else {
+						let now = new Date();
+						let dt = now.toLocaleString().replace(',', ' at');
+						LogMessage(`Transaction to server failed on ${dt}.`);
+						let d = new Dialog();
+						d.Error(`Transaction failed.  Please try again.  If this problem persists, contact the tournament administrator.`);
+					}
+				},
+				error: function(request, status, error) {
+					let now = new Date();
+					let dt = now.toLocaleString().replace(',', ' at');
+					LogMessage(`Transaction to server failed on ${dt}.`);
+					let d = new Dialog();
+					d.Error(`Transaction failed.  Please try again.  If this problem persists, contact the tournament administrator.`);
+				},
+			});
+		};
+
+		this.UpdateHoleAwards = function(awards) {
+			let html = [];
+			if (awards === null) {
+				html.push('<div style="font-size: 14px;">Hole awards have been disabled until the completion of the tournament.</div>');
+			}
+			else {
+				html.push(`<table style="border-collapse: collapse;border: 1px solid #FFF; width: 100%;">`);
+				for (let name in awards) {
+					html.push(
+						`<tr>` +
+						`<td class="ColumnHeader" style="font-size: 14px !important; padding: 6px;" colspan="3">${name}</td>` +
+						`</tr>`
+					);
+					html.push(
+						`<tr>` +
+						`<td class="ColumnHeader" style="background-color: #999; text-align: left; font-size: 12px !important;">Player</td>` +
+						`<td class="ColumnHeader" style="background-color: #999; font-size: 12px !important;">Team</td>` +
+						`<td class="ColumnHeader" style="background-color: #999; font-size: 12px !important;">Time</td>` +
+						`</tr>`
+					);
+					for (let entry of awards[name]) {
+						let className = "NotBest";
+						if (entry.isBest) {className="IsBest";}
+						html.push(
+							`<tr>` +
+							`<td class="Cell ${className}" style="text-align: left;   font-size: 12px !important;">${entry.player}</td>` +
+							`<td class="Cell ${className}" style="text-align: center; font-size: 12px !important;">${entry.team}</td>` +
+							`<td class="Cell ${className}" style="text-align: center; font-size: 12px !important;">${entry.createdOn}</td>` +
+							`</tr>`
+						);
+					}
+				}
+				html.push(`</table>`);
+			}
+			html = html.join('');
+			$('#HoleAwards').html(html);			
+		};
+		
+		this.UpdateOurTeamData = function(team) {
+			$('#TeamHandicap').html(team.handicap);
+			$('#TeamAdjScore').html(team.proj_adj_rel_score);
+			$('#TeamRawScore').html(team.current_rel_score);
+			$("#TeamHolesPlayed").text(team.holes_played);
+			$("#TeamHolesLeft").text(18 - Number(team.holes_played));
+		};
+
+		this.UpdateLeaderBoard = function(teams) {
+			let html = [];
+			if (teams === null) {
+				html.push('<div style="font-size: 14px;">The leader board has been disabled until the completion of the tournament.</div>');
+			}
+			else {
+				html.push(`<table style="border-collapse: collapse;border: 1px solid #FFF; width: 100%;">`);
+				html.push(
+					`<tr>` +
+					`<td class="ColumnHeader">Rank</td>` +
+					`<td class="ColumnHeader">Team</td>` +
+					`<td class="ColumnHeader">Holes</td>` +
+					`<td class="ColumnHeader">Raw<br>Score</td>` +
+					`<td class="ColumnHeader">Hdcp</td>` +
+					`<td class="ColumnHeader">Adj<br>Score</td>` +
+					`</tr>`
+				);
+				for (let team of teams) {
+					let rowClass = 'Not-Me';
+					if (team.name == TeamInfo.Name) {
+						rowClass = 'Me';
+						$('#TeamHandicap').html(team.handicap);
+						$('#TeamAdjScore').html(team.proj_adj_rel_score);
+						$('#TeamRawScore').html(team.current_rel_score);
+					}
+					html.push(
+						`<tr>` +
+						`<td class="Cell ${rowClass}" style="font-weight:bold">${team.rank}</td>` +
+						`<td class="Cell ${rowClass}" style="font-weight:bold">` + 
+						(
+							team.name != TeamInfo.Name ? 
+							`<a href="javascript:ShowTeamInfo('${team.name}');">${team.name}</a>` :
+							`${team.name}`
+
+						) +
+						`</td>` +
+						`<td class="Cell ${rowClass}" style="font-weight:bold">${team.holes_played}</td>` +
+						`<td class="Cell ${rowClass}" style="font-weight:bold">${team.current_rel_score}</td>` +
+						`<td class="Cell ${rowClass}" style="font-weight:bold">${team.handicap}</td>` +
+						`<td class="Cell ${rowClass}" style="font-weight:bold">${team.proj_adj_rel_score}</td>` +
+						`</tr>`
+					);
+					let teamInfoLookupHTML = [
+						`<table class="team-info">`,
+						`<tr><th>Team</th></tr>`,
+						`<tr><td>${team.name}</td></tr>`,
+						`<tr><th>Players</th></tr>`,
+						`<tr><td>${team.player1}<br>${team.player2}<br>${team.player3}</td></tr>`,
+						`<tr><th>Number of Holes Played</th></tr>`,
+						`<tr><td>${team.holes_played}</td></tr>`,
+						`<tr><th>Current Raw Score</th></tr>`,
+						`<tr><td>${team.current_rel_score}</td></tr>`,
+						`<tr><th>Team Handicap</th></tr>`,
+						`<tr><td>${team.handicap}</td></tr>`,
+						`<tr><th>Current Adjusted Score</th></tr>`,
+						`<tr><td>${team.proj_adj_rel_score}</td></tr>`,
+						`</table>`,
+					];
+					teamInfoLookup[team.name] = teamInfoLookupHTML.join('');
+				}
+				html.push(`</table>`);
+			}
+			html = html.join('');
+			$('#LeaderBoard').html(html);
+		};
+		
+		this.SubmitRequest = function(Value) {
+			$ThisSite.Data['Request'] = Value;
+			$ThisSite.FreezeData();
+		};
+		
+		this.SearchSubmitFunction = function() {
+			$ThisSite.Data['Request'] = 'Search';
+			$ThisSite.Data['Value'] = $('#SearchText').val();
+			$ThisSite.FreezeData();
+		};
+		
+		// Dialog(ArgHash)
+		this.Dialog = function(ArgHash) {
+			var DefaultButtons =
+			{
+				"OK": function() 
+				{
+					$(this).remove();
+				}
+			};
+			var Icon = ArgHash.Icon || '';
+			var Title = ArgHash.Title || '';
+			var Message = ArgHash.Message || '';
+			var Modal = ArgHash.Modal || true;
+			var Resizable = ArgHash.Resizable || false;
+			var Buttons = ArgHash.Buttons || DefaultButtons;
+			var Width = ArgHash.Width || '450px';
+			var HTML = "";
+			
+			if ($ThisSite.IsMobile())
+			{
+				Width = '300px';
+			}
+			
+			if (Icon && Icon.length > 0)
+			{
+				HTML =
+					'<div style="position: relative;">' +
+					'<div style="height:10px;"/>' +
+					'<table style="width:95%; margin:auto;">'+
+					'<tr style="vertical-align:top;">' +
+					'<td style="vertical-align:top; padding:10px; width:20%;">' +
+					'<div style="width:45px;text-align:center;">' +
+					'<img src="img/dialog/'+Icon+'.png">' +
+					'</div>' +
+					'</td>' +
+					'<td style="vertical-align:top; font-size:100%; width:75%;">'+Message+'</td>' +
+					'</tr>' +
+					'</table>' +
+					'<div style="height:10px;"/>' +
+					'</div>';
+			}
+			else
+			{
+				HTML = 
+					'<div style="position: relative; left:-5px;">' +
+					'<div style="height:10px;"/>' +
+					'<div style="vertical-align:top; font-size:100%; width:90%; margin: auto;">'+Message+'</div>' +
+					'<div style="height:10px;"/>' + 
+					'</div>';
+			}
+			//$(".ui-dialog").css("cssText", "z-index: 1000 !important;");
+			$('<div></div>').appendTo('body').html(HTML).dialog
+			(
+				{
+					//modal: Modal, 
+					modal: true, 
+					title: Title, 
+					zIndex: 1000, 
+					autoOpen: true,
+					width: Width,
+					//maxWidth: Width, 
+					height: 'auto',
+					//fluid: true,
+					resizable: Resizable,
+					buttons: Buttons,
+					close: function (event, ui) 
+					{
+						$(this).remove();
+					}
+				}
+			);	
+		};
+		
+		this.LoginSubmitFunction = function() {
+			// $ThisSite.Data['Security'] = 'Login';
+			// $ThisSite.Data['Credentials'] = 
+			// [
+			// 	$('#UserName').val(),
+			// 	$('#Password').val(),
+			// ];
+			// $('#Password').val($ThisSite.RandomString($('#Password').val()));
+			$ThisSite.FreezeData();
+			$ThisSite.Submit();
+		};
+		
+		this.FreezeData = function() {
+			let OriginalData = JSON.stringify($ThisSite.Data, null, 2);
+			$('#id_data').val(OriginalData);
+		};
+		
+		this.OnSubmit = function() {
+			$ThisSite.FreezeData();
+		};
+				
+		this.Submit = function(Request) {
+			if (Request != null && Request.length > 0)
+			{
+				if ($ThisSite.Data.IsLoggedIn == 1 && Request == 'Page-Login')
+				{
+					$ThisSite.Dialog
+					(
+						{
+							Icon: 'Info',
+							Title: 'Cannot log in',
+							Message: 'You are already logged in.',
+							Buttons:
+							{
+								"OK": function() 
+								{
+									$(this).remove();
+									return false;
+								},
+							},
+						}
+					);
+				}
+				else if ($ThisSite.Data.IsLoggedIn == 0 && Request == 'Page-Logout')
+				{
+					$ThisSite.Dialog
+					(
+						{
+							Icon: 'Info',
+							Title: 'Cannot log out',
+							Message: 'You are not logged in at this time.',
+							Buttons:
+							{
+								"OK": function() 
+								{
+									$(this).remove();
+									return false;
+								},
+							},
+						}
+					);
+				}
+				else if ($ThisSite.Data.IsLoggedIn == 1 && Request == 'Page-Logout')
+				{
+					$ThisSite.Dialog
+					(
+						{
+							Icon: 'Question',
+							Title: 'Log out?',
+							Message: 'Log out now?',
+							Buttons:
+							{
+								"Yes": function() 
+								{
+									$(this).remove();
+									$ThisSite.Data['Request'] = Request;
+									$ThisSite.FreezeData();
+									$("#SiteForm").submit();
+								},
+								"No": function() 
+								{
+									$(this).remove();
+								},
+							},
+							Modal: true,
+						}
+					);
+				}
+				else
+				{
+					$ThisSite.Data['Request'] = Request;
+					$ThisSite.FreezeData();
+					if ($ThisSite.OfflineMode)
+					{
+						alert("NOTE: Running in offline mode.  Cannot submit.");
+					}
+					else
+					{
+						$("#SiteForm").submit();
+					}
+				}
+			}
+			else
+			{
+				$ThisSite.FreezeData();
+				if ($ThisSite.OfflineMode)
+				{
+					alert("NOTE: Running in offline mode.  Cannot submit.");
+				}
+				else
+				{
+					$("#SiteForm").submit();
+				}
+			}
+		};
+		
+		// this.UpdateData = function() {
+		// 	$ThisSite.FreezeData();
+		// };
+		
+		this.RandomString = function(Value)  {
+			if (Value.length == 0) 
+			{
+				return Value;
+			};
+			RandomString = Value;
+			while(RandomString == Value)
+			{
+				var CharSet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&*';
+				RandomString = '';
+				for (var i = 0; i < Value.length; i++) 
+				{
+					var pos = Math.floor(Math.random() * CharSet.length);
+					RandomString += CharSet.substring(pos,pos+1);
+				}
+			}
+			return RandomString;
+		};
+		
+		this.Initialize();
+	};
+
+	$(document).ready
+	(
+		function()
+		{
+			console.log(`update_url={{ update_url }}`)
+			$.ajaxSetup({
+				beforeSend: function (xhr, settings) {
+					if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+						xhr.setRequestHeader("X-CSRFToken", csrftoken);
+					}
+				}
+			});
+		
+			$Site = new Site();
+			if (!$Site.OfflineMode)
+			{
+				// if (TeamInfo && 'Valid' in TeamInfo && TeamInfo.Valid)
+				{
+					$('#Team').text(TeamInfo['Name']);
+					if (TeamInfo['Handicap'] >= 0)
+					{
+						$('#Handicap').text("+" + TeamInfo['Handicap'].toString());
+					}
+					else
+					{
+						$('#Handicap').text(TeamInfo['Handicap']);
+					}
+					$('#Player1').text(TeamInfo['Players'][0]);
+					$('#Player2').text(TeamInfo['Players'][1]);
+					$('#Player3').text(TeamInfo['Players'][2]);
+					$('.owl-carousel').owlCarousel
+					(
+						{
+							loop: false,
+							margin: 0,
+							nav: false,
+							dots: false,
+							autoWidth: true,
+						}
+					);
+					PopulateScores();
+					var owl = $('.owl-carousel');
+					SelectedHole = TeamInfo['StartHole'];
+
+
+					let holesPlayed = 0;
+                    let lastHole = 0;
+					for (let i = 1; i <= 18; i++) {
+						if (TeamInfo.Score[i].Valid) {
+                            lastHole = i;
+							holesPlayed++;
+						}
+					}
+                    if ((holesPlayed > 0) && (holesPlayed < 18) && (lastHole == 18)) {
+                        for (let i = 1; i <= 18; i++) {
+                            if (TeamInfo.Score[i].Valid) {
+                                lastHole = i;
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                    if ((holesPlayed != 0) && (holesPlayed != 18)) {
+                        SelectedHole = lastHole + 1;
+                        if (SelectedHole > 18) {
+                            SelectedHole = 1;
+                        }
+                    }
+
+
+					SelectedHoleKey = String(SelectedHole);
+					owl.trigger('to.owl.carousel', SelectedHole - 1);
+					SelectHole(SelectedHole);
+					UpdateView();
+				}
+			}
+		}
+	);
+
+	$(".ScoreCard").click(ScoreCardClick);
+
+	function ScoreCardClick()
+	{
+		SelectedHole = parseInt($(this).attr('hole'));
+		SelectedHoleKey = String(SelectedHole);
+		SelectHole(SelectedHole);
+	};
+
+	function SelectHole(HoleNumber)
+	{
+		SelectedHole = Number(HoleNumber);
+		SelectedHoleKey = String(SelectedHole);
+		for (var i = 1; i <= 18; i++)
+		{
+			var ID = 'ScoreCard-' + i;
+			$('#'+ID).css({"opacity":0.3});
+		}
+		var ID = 'ScoreCard-' + SelectedHole.toString();
+		$('#'+ID).css({"opacity":1});
+		$('.HoleNumber').text(SelectedHole);
+		// zzz
+
+		if (CourseInfo2[SelectedHoleKey].special.length > 0) {
+			$('#SpecialAwardPlayerSelect .text').html(CourseInfo2[SelectedHoleKey].special);
+			$('#SpecialAwardPlayerSelect').slideDown(200);	
+		}
+		else {
+			$('#SpecialAwardPlayerSelect').slideUp(200);	
+		}
+
+		//SpecialAwardPlayerSelect
+	};
+
+	$("#UserSelectHole").click(GotoHoleDialog);
+	// <!-- $("#EnterScore").click(ScoreInputDialog); -->
+	$("#Current").click(GotoSelectedHole);
+	$("#Prev").click(GotoPreviousHole);
+	$("#Next").click(GotoNextHole);
+
+	function ShowTeamInfo(teamName)
+	{
+		let d = new Dialog();
+		d.Launch({
+			Title: `Team ${teamName} Info`,
+			Content: teamInfoLookup[teamName],
+			Height: 470,
+		});
+	};
+
+	function GotoHoleDialog()
+	{
+		EnteredScore = 0;
+		let HTML = [
+				'<div style="font-weight:bold; text-align: center;">Select Hole:</div>',
+				'<div style="height: 10px;"></div>',
+				'<div style="text-align: center; font-size: 14px;">' ,
+				'<a class="btn btn-outline-secondary" style="width: 30px; text-align: center; padding: 8px 0;" href="javascript:UserSelectHole(1);">1</a> ' ,
+				'<a class="btn btn-outline-secondary" style="width: 30px; text-align: center; padding: 8px 0;" href="javascript:UserSelectHole(2);">2</a> ' ,
+				'<a class="btn btn-outline-secondary" style="width: 30px; text-align: center; padding: 8px 0;" href="javascript:UserSelectHole(3);">3</a> ' ,
+				'<a class="btn btn-outline-secondary" style="width: 30px; text-align: center; padding: 8px 0;" href="javascript:UserSelectHole(4);">4</a> ' ,
+				'<a class="btn btn-outline-secondary" style="width: 30px; text-align: center; padding: 8px 0;" href="javascript:UserSelectHole(5);">5</a> ' ,
+				'<a class="btn btn-outline-secondary" style="width: 30px; text-align: center; padding: 8px 0;" href="javascript:UserSelectHole(6);">6</a> ' ,
+				'</div>' ,
+				'<div style="height: 10px;"></div>' ,
+				'<div style="text-align: center; font-size: 14px;">' ,
+				'<a class="btn btn-outline-secondary" style="width: 30px; text-align: center; padding: 8px 0;" href="javascript:UserSelectHole(7);">7</a> ' ,
+				'<a class="btn btn-outline-secondary" style="width: 30px; text-align: center; padding: 8px 0;" href="javascript:UserSelectHole(8);">8</a> ' ,
+				'<a class="btn btn-outline-secondary" style="width: 30px; text-align: center; padding: 8px 0;" href="javascript:UserSelectHole(9);">9</a> ' ,
+				'<a class="btn btn-outline-secondary" style="width: 30px; text-align: center; padding: 8px 0;" href="javascript:UserSelectHole(10);">10</a> ' ,
+				'<a class="btn btn-outline-secondary" style="width: 30px; text-align: center; padding: 8px 0;" href="javascript:UserSelectHole(11);">11</a> ' ,
+				'<a class="btn btn-outline-secondary" style="width: 30px; text-align: center; padding: 8px 0;" href="javascript:UserSelectHole(12);">12</a> ' ,
+				'</div>' ,
+				'<div style="height: 10px;"></div>' ,
+				'<div style="text-align: center; font-size: 14px;">' ,
+				'<a class="btn btn-outline-secondary" style="width: 30px; text-align: center; padding: 8px 0;" href="javascript:UserSelectHole(13);">13</a> ' ,
+				'<a class="btn btn-outline-secondary" style="width: 30px; text-align: center; padding: 8px 0;" href="javascript:UserSelectHole(14);">14</a> ' ,
+				'<a class="btn btn-outline-secondary" style="width: 30px; text-align: center; padding: 8px 0;" href="javascript:UserSelectHole(15);">15</a> ' ,
+				'<a class="btn btn-outline-secondary" style="width: 30px; text-align: center; padding: 8px 0;" href="javascript:UserSelectHole(16);">16</a> ' ,
+				'<a class="btn btn-outline-secondary" style="width: 30px; text-align: center; padding: 8px 0;" href="javascript:UserSelectHole(17);">17</a> ' ,
+				'<a class="btn btn-outline-secondary" style="width: 30px; text-align: center; padding: 8px 0;" href="javascript:UserSelectHole(18);">18</a> ' ,
+				'</div>' ,
+				'<div style="height: 10px;"></div>' ,
+				'</div>',
+		];
+		let d = new Dialog();
+		d.Launch({
+			Title: 'Go to hole ...',
+			Content: HTML.join(''),
+			Width: 350,
+			Buttons: [
+				{Name: "Enter", Function: function() {GotoUserSelectedHole(); d.Close();}},
+				{Name: "Cancel", Function: function() {d.Close();}},
+			],
+		});
+	};
+
+	function UserSelectHole(Hole)
+	{
+		SelectedHole = Number(Hole);
+		SelectedHoleKey = String(SelectedHole);
+	};
+
+	function DoNothing(Hole)
+	{
+		GotoUserSelectedHole();
+	};
+
+	function GotoUserSelectedHole()
+	{
+		GotoHole(SelectedHole+1);
+		SelectHole(SelectedHole);
+	};
+
+	var ScoreDialog = new Dialog();
+	function ScoreInputDialog()
+	{
+		EnteredScore = 0;
+		let HTML = 
+		[
+			'<div style="font-weight:bold; text-align: center;">Par Relative Score Input:</div>',
+			'<div style="height: 10px;"></div>',
+			'<div style="text-align: center; font-size: 14px;">',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' + (CourseInfo2[SelectedHoleKey]['par']-4) + ')">-4</a> ',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' + (CourseInfo2[SelectedHoleKey]['par']-3) + ')">-3</a> ',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' + (CourseInfo2[SelectedHoleKey]['par']-2) + ')">-2</a> ',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' + (CourseInfo2[SelectedHoleKey]['par']-1) + ')">-1</a> ',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' + (CourseInfo2[SelectedHoleKey]['par']+0) + ')" >+0</a> ',
+			'</div>',
+			'<div style="height: 5px;"></div>',
+			'<div style="text-align: center; font-size: 14px;">',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' + (CourseInfo2[SelectedHoleKey]['par']+1) + ')">+1</a> ',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' + (CourseInfo2[SelectedHoleKey]['par']+2) + ')">+2</a> ',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' + (CourseInfo2[SelectedHoleKey]['par']+3) + ')">+3</a> ',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' + (CourseInfo2[SelectedHoleKey]['par']+4) + ')">+4</a> ',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' + (CourseInfo2[SelectedHoleKey]['par']+5) + ')">+5</a>',
+			'</div>',
+			'<div style="height: 20px;"></div>',
+			'<div style="font-weight:bold; text-align: center;">Raw Score Input:</div>',
+			'<div style="height: 10px;"></div>',
+			'<div style="text-align: center; font-size: 14px;">',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' +  1 + ')">1</a> ',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' +  2 + ')">2</a> ',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' +  3 + ')">3</a> ',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' +  4 + ')">4</a> ',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' +  5 + ')">5</a> ',
+			'</div>',
+			'<div style="height: 5px;"></div>',
+			'<div style="text-align: center; font-size: 14px;">',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' +  6 + ');">6</a> ',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' +  7 + ');">7</a> ',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' +  8 + ');">8</a> ',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' +  9 + ');">9</a> ',
+			'<a class="btn btn-outline-secondary" style="width: 40px; padding: 8px, 0;" href="javascript:EnterScore(' + 10 + ');">10</a>',
+			'</div>',
+			'<div style="height: 20px;"></div>',
+			'<div style="font-weight:bold; text-align: center;">Oops, Wrong Hole:</div>',
+			'<div style="height: 10px;"></div>',
+			'<div style="text-align: center; font-size: 14px;">',
+			'<a class="btn btn-outline-secondary" style="width: 215px;" href="javascript:ClearScore();">Clear</a> ',
+			'</div>'
+		];
+		ScoreDialog.Launch(
+			{
+				Title: 'Hole ' + SelectedHole + " : Par " + CourseInfo2[SelectedHoleKey]['par'],
+				Content: HTML.join(''),
+				Width: 350,
+				Height: 450,
+				Buttons: [
+					{Name: 'Enter', Function: function() {UpdateScore(); ScoreDialog.Close();}},
+					{Name: 'Cancel', Function: function() {ScoreDialog.Close();}},
+				],
+			}
+		);
+		return;
+	};
+
+	function EnterScore(Score)
+	{
+		EnteredScore = Number(Score);
+	};
+
+	function ClearScore(Score)
+	{
+		EnteredScore = Number(0);
+	};
+
+	function UpdateScore()
+	{
+		RawScore = EnteredScore;
+		var Par = CourseInfo2[SelectedHoleKey]['par']
+		if (RawScore == 0) {
+			RelScoreString = ''
+			$("#HoleStatus"+SelectedHole).removeClass("Active");
+		}
+		else {
+			RelScore = EnteredScore - Par;
+			RelScoreString = RelScore.toString();
+			if (RelScore >= 0)
+			{
+				RelScoreString = "+" + RelScoreString;
+			}
+		}
+		TeamInfo['Score'][SelectedHole]['Valid'] = 1;
+		TeamInfo['Score'][SelectedHole]['RawScore'] = RawScore;
+		TeamInfo['Score'][SelectedHole]['RelScore'] = RelScoreString;
+		SelectHole(SelectedHole);
+		PopulateScores();
+		SelectedHole = SelectedHole + 1;
+		SelectedHoleKey = String(SelectedHole);
+		if (SelectedHole > 18)
+		{
+			SelectedHole = 1
+			SelectedHoleKey = String(SelectedHole);
+		}
+		GotoHole(SelectedHole);
+		SelectHole(SelectedHole);
+		if (!DebugMode)
+		{
+			ExecuteAjaxTransaction(1);
+		}
+	};
+
+	function UpdateView()
+	{
+		ExecuteAjaxTransaction(0);
+	};
+
+	function SendScoreToDatabase()
+	{
+		ExecuteAjaxTransaction(1);
+	};
+
+	function LogMessage(msg) {
+		$('#Notes').html(msg + '&nbsp;');
+	};
+
+	function SpinMessage(msg) {
+		$('#Notes').html('<i class="fas fa-sync fa-spin"></i>&nbsp;' + msg + '&nbsp;');
+	};
+
+	function ClearMessage() {
+		$('#Notes').html('&nbsp;');
+	};
+
+	var teamInfoLookup = {};
+	function ExecuteAjaxTransaction(EnableWrite)
+	{
+		$Site.Data['TeamInfo'] = TeamInfo;
+		$Site.Data['EnableWrite'] = EnableWrite;
+		$('#Notes').html("");
+		LogMessage("");
+		$Site.DataRequest();
+	};
+
+	function GotoHole(HoleNumber)
+	{
+		var GotoHoleNumber = Number(HoleNumber) - 2;
+		var owl = $('.owl-carousel');
+		if (GotoHoleNumber < 1)
+		{
+			GotoHoleNumber = 0;
+		}
+		owl.trigger('to.owl.carousel', GotoHoleNumber);
+	};
+
+	function GotoSelectedHole()
+	{
+		GotoHole(SelectedHole);
+		SelectHole(SelectedHole);
+	};
+
+	function GotoPreviousHole()
+	{
+		SelectedHole = SelectedHole - 1;
+		SelectedHoleKey = String(SelectedHole);
+		if (SelectedHole < 1)
+		{
+			SelectedHole = 18;
+			SelectedHoleKey = String(SelectedHole);
+		}
+		GotoHole(SelectedHole);
+		SelectHole(SelectedHole);
+	};
+
+	function GotoNextHole()
+	{
+		SelectedHole = SelectedHole + 1;
+		SelectedHoleKey = String(SelectedHole);
+		if (SelectedHole > 18)
+		{
+			SelectedHole = 1;
+			SelectedHoleKey = String(SelectedHole);
+		}
+		GotoHole(SelectedHole);
+		SelectHole(SelectedHole);
+	};
+
+	function PopulateScores()
+	{
+		var HolesPlayed = 0;
+		for (var i = 1; i <= 18; i++)
+		{
+			if (TeamInfo['Score'][i]['Valid'] > 0)
+			{
+				HolesPlayed++;
+				$("#HoleScore-"+i).text(TeamInfo['Score'][i]['RelScore']);
+				// $("#HolePlayed"+i).addClass("HolePlayed");
+				// $("#HolePlayed"+i).removeClass("HoleNotPlayed");
+				$("#HoleStatus"+i).addClass("Active");
+			}
+			else
+			{
+				// $("#HolePlayed"+i).addClass("HoleNotPlayed");
+				// $("#HolePlayed"+i).removeClass("HolePlayed");
+				$("#HoleStatus"+i).removeClass("Active");
+			}
+			$("#HolePar-"+i).text("Par " + CourseInfo2[String(i)]['par']);
+			$("#HoleDist-"+i).text(CourseInfo2[String(i)]['yards'] + " yards");
+		}
+		$("#TeamHolesPlayed").text(HolesPlayed);
+		$("#TeamHolesLeft").text(18 - HolesPlayed);
+	};
+
+	function AdminSelectTeam()
+	{
+		$Site.SubmitRequest('Scorecard-Render');
+		$Site.Submit();
+	};
+
+	function SelectAnotherTeam() {
+		let HTML = [];
+		HTML.push(`<div id="SelectAnotherTeamValue" style="display: none;"></div>`);
+		{% for team_name,team in request.session.cache.team|sortkeys %}
+		HTML.push(`<a class="btn btn-outline-secondary" href="javascript:$('#SelectAnotherTeamValue').html('{{ team_name }}');" style="width: 100%; margin-bottom: 2px; text-align: left;">`);
+		HTML.push(`<div style="font-weight: bold;">Team {{ team_name }}</div>`);
+		HTML.push(`<div style="font-size: 12px; line-height: 12px;">{{ team.player1 }}<br>{{ team.player2 }}<br>{{ team.player3 }}</div>`);
+		HTML.push(`</a>`)
+		{% endfor %}
+		let html = HTML.join('\n');
+		let d = new Dialog();
+		d.Launch({
+			Title: 'Select Team',
+			Content: html,
+			Height: 500,
+			Buttons: [
+				{Name: 'Select', Function: function() {
+					d.Close();
+					let team_name = $('#SelectAnotherTeamValue').html();
+					window.location.href = `{% url 'score-card' %}/${team_name}`;
+				}},
+				{Name: 'Cancel', Function: function() {d.Close();}},
+			],
+		});
+	};
+
+	function Plus(n) {
+		if (n >= 0) return `+${n}`;
+		return `${n}`;
+	};
+
+	function ProcessHelpText(text) {
+		return `<div class="help" style="margin-top: -20px;"><p>${text}</p></div>`.replace(/\n/g, "</p>\n<p>");
+	};
+
+	function ScoreHelp() {
+		let d = new Dialog();
+		d.Launch({
+			Title: 'Scorecard Help?',
+			Content: '<p>Do you want to go to the help page providing guidance on scorecard input?</p><p>If you click <strong>Yes</strong>, you will be redirected to the help documentation.  You can always come back to your electronic scorecard when done viewing the documentation.</p>',
+			Width: 400,
+			Height: 350,
+			Buttons: [
+				{Name: 'Yes', Function: function() {window.location.href = "{% url 'article-view' key='electronic-scorecard' %}";} },
+				{Name: 'No', Function: function() {d.Close();} },
+			],
+		});
+	};
+
+	function AdjustedScoreHelp() {
+		let content = `{% include 'help/adjusted-score.html' %}`;
+		let d = new Dialog();
+		d.Launch({
+			Title: 'Adjusted Score Help',
+			Content: ProcessHelpText(content),
+			Width: 400,
+			Height: 450,
+		});
+	};
+
+	function LeaderBoardHelp() {
+		let content = `{% include 'help/leaderboard.html' %}`;
+		let d = new Dialog();
+		d.Launch({
+			Title: 'Leader Board Help',
+			Content: ProcessHelpText(content),
+			Width: 400,
+			Height: 450,
+		});
+	};
+
+	function EnterSpecialAward() {
+		let award = $('#SpecialAwardPlayerSelect .text').html();
+		let awardLong = award +  ' : Hole #' + SelectedHole;
+		let content = [
+			`<input type="hidden" id="SpecialAwardPlayerName">`,
+			`<p>Did one of the players on your team get <strong>${awardLong}</strong>?  If so, click the player's name and then hit <strong>Enter</strong>:</p>`,
+			{% if team.player1|length > 0 %}
+			`<a class="btn btn-outline-secondary" style="width: 100%; margin-bottom: 2px; text-align: left;" href="javascript:$('#SpecialAwardPlayerName').val('{{ team.player1 }}')">{{ team.player1 }}</a>`,
+			{% endif %}
+
+			{% if team.player2|length > 0 %}
+			`<a class="btn btn-outline-secondary" style="width: 100%; margin-bottom: 2px; text-align: left;" href="javascript:$('#SpecialAwardPlayerName').val('{{ team.player2 }}')">{{ team.player2 }}</a>`,
+			{% endif %}
+			
+			{% if team.player3|length > 0 %}
+			`<a class="btn btn-outline-secondary" style="width: 100%; margin-bottom: 2px; text-align: left;" href="javascript:$('#SpecialAwardPlayerName').val('{{ team.player3 }}')">{{ team.player3 }}</a>`,
+			{% endif %}
+		];
+		let d = new Dialog();
+		d.Launch({
+			Title: awardLong,
+			Content: content.join(''),
+			Width: 350,
+			Height: 380,
+			Buttons: [
+				{Name: 'Enter', Function: function() {
+					$Site.Data['Award'] = {
+						AwardType: awardLong,
+						Team: '{{ team.name }}',
+						Player: $('#SpecialAwardPlayerName').val(),
+					};
+					ExecuteAjaxTransaction(1);
+					delete $Site.Data['Award'];
+					d.Close()
+				}},
+				{Name: 'Cancel', Function: function() {d.Close()}},
+			],
+		});
+
+	};
+
+	function showToast(msg) {
+		$('#StatusBar .Text').html(msg);
+		$('#StatusBar').slideDown(400);
+		setTimeout(function(){ $('#StatusBar').slideUp(400); }, 2000);
+	};
+
+	</script>
+{% endblock %}

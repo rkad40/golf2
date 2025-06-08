@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% load static %}
+{% load assets %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<p>Please select a player profile to edit:</p>
+{% for player in players %}
+<a class="btn btn-primary" href="{% url 'player-profile-name' name=player %}" style="width: 100%; margin-bottom: 5px;"><i class="fas fa-user"></i> {{ player }}</a>
+{% endfor %}
+{% endblock %}
+
+
