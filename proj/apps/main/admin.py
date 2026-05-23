@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin.sites import NotRegistered
 from django.http import HttpResponse
 from .models import Team, TeamAccess, Course, Hole, Tournament, Cache, Award, History, Player
 from .util import update_team_scores
@@ -11,7 +12,10 @@ from .util import create_random_password
 
 from django_summernote.utils import get_attachment_model
 
-admin.site.unregister(get_attachment_model())
+try:
+    admin.site.unregister(get_attachment_model())
+except NotRegistered:
+    pass
 
 admin.site.site_header = 'Rockne Invitational Golf Tournament'
 admin.site.index_title = 'Admin Dashboard'

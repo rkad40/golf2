@@ -1,8 +1,9 @@
 from apps.main.util import dictate
+import datetime
 import fs, json, sys
-from unchained import get_localized_datetime
 from django.test import TestCase, RequestFactory, override_settings
 from django.conf import settings
+from django.utils import timezone
 from main.util import TestData
 from bs4 import BeautifulSoup
 from django.urls import reverse
@@ -31,6 +32,12 @@ TABLE_TEAM_DATA = r'''name	player1	player2	player3	start_hole	handicap	history	a
 '''
 
 JSON_TEAM_DATA = r'''[{"name": "01A", "player1": "Colton Tucker", "player2": "Samuel Tucker", "player3": "Ronnie Tucker", "start_hole": 1, "handicap": 8, "history": 90, "active": true}, {"name": "01B", "player1": "Gary Tucker", "player2": "Scott Tucker", "player3": "Jeremy Tucker", "start_hole": 1, "handicap": 11, "history": 0, "active": true}, {"name": "14A", "player1": "Bobby Goertz", "player2": "Cliff Goertz", "player3": "Steve Darilek", "start_hole": 14, "handicap": 3, "history": 60, "active": true}, {"name": "14B", "player1": "John Allen Goertz", "player2": "TBD", "player3": "TBD", "start_hole": 14, "handicap": 15, "history": 0, "active": true}, {"name": "15A", "player1": "Jon Bartsch", "player2": "Chris Fohn", "player3": "Jackie Tucker", "start_hole": 15, "handicap": 3, "history": 20, "active": true}, {"name": "15B", "player1": "Greg Friske", "player2": "Nicholas Friske", "player3": "Bill Kadura", "start_hole": 15, "handicap": 15, "history": 0, "active": true}, {"name": "16A", "player1": "John Kadura", "player2": "Kris Klaus", "player3": "Brian Klaus", "start_hole": 16, "handicap": 9, "history": 0, "active": true}, {"name": "16B", "player1": "Scott Rascke", "player2": "Justin Fohn", "player3": "Clint Osborne", "start_hole": 16, "handicap": 10, "history": 0, "active": true}, {"name": "17A", "player1": "Elmer Goertz", "player2": "Darren Goertz", "player3": "Christopher Goertz", "start_hole": 17, "handicap": 9, "history": 0, "active": true}, {"name": "17B", "player1": "Richie Fiebrich", "player2": "Steve Fiebrich", "player3": "Kevin Klaus", "start_hole": 17, "handicap": 6, "history": 45, "active": true}, {"name": "17C", "player1": "Stephen Klaus", "player2": "Adam Goertz", "player3": "Kevin Wolf", "start_hole": 17, "handicap": 13, "history": 0, "active": true}, {"name": "17D", "player1": "Bradley Nutt", "player2": "Kaycee Nutt", "player3": "Carter Nutt", "start_hole": 17, "handicap": 5, "history": 0, "active": true}, {"name": "18A", "player1": "Kenny Hoffman", "player2": "Joe Hoffman", "player3": "Toby Hoffman", "start_hole": 18, "handicap": 9, "history": 45, "active": true}, {"name": "18B", "player1": "John Altum", "player2": "Shawn Altum", "player3": "Rodney Kadura", "start_hole": 18, "handicap": 8, "history": 0, "active": true}]'''
+
+def get_localized_datetime(value):
+    value = datetime.datetime.fromisoformat(value)
+    if timezone.is_naive(value):
+        return timezone.make_aware(value, timezone.get_current_timezone())
+    return value
 
 class MainTest(TestCase):
 

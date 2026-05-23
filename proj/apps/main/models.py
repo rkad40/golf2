@@ -15,9 +15,7 @@ from rex import Rex
 DEBUG = False
 
 def localize_now():
-    val = datetime.now()
-    current_tz = timezone.get_current_timezone()
-    return current_tz.localize(val)
+    return timezone.now()
 
 r"""
   ____           _

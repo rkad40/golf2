@@ -6,8 +6,8 @@ from main.models import Course, Team
 from django.db.models import Q
 from django.contrib import messages
 from cronos import epoch
-import unchained
 from django.conf import settings
+from django.utils import timezone
 import fs
 
 GOLF_WORDS = ['ace', 'backspin', 'birdie', 'blade', 'blue', 'break', 'bogey', 'bunker', 'cart', 
@@ -545,7 +545,7 @@ def update_special_award(request, team, data):
         award_type=data['AwardType'], 
         team=team, 
         player=data['Player'], 
-        created_on=unchained.get_localized_datetime_now(),
+        created_on=timezone.now(),
         is_best=True
     )
     return f"""<strong>{data['Player']}</strong> is now the top name on the list for <strong>{data['AwardType']}</strong>."""
@@ -656,7 +656,7 @@ def update_team_scores(request, team, data=None, write=True):
 
     # Save the data.
     if write:
-        team.updated_on = unchained.get_localized_datetime_now()
+        team.updated_on = timezone.now()
         team.save()
         return True
 

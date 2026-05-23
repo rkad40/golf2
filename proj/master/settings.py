@@ -202,9 +202,9 @@ TIME_ZONE = 'America/Chicago'
 
 USE_I18N = True
 
-USE_L10N = True
-
 USE_TZ = True
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # FORM_RENDERER default to 'django.forms.renderers.DjangoTemplates'.  To create custom widgets, 
 # that define widget templates, you need to change this value to 'django.forms.renderers.TemplatesSetting'.

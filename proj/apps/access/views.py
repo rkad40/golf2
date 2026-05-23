@@ -14,7 +14,7 @@ from django.core.validators import validate_email
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render, reverse
 from django.template.loader import render_to_string
-from django.utils.encoding import force_bytes, force_text
+from django.utils.encoding import force_bytes, force_str
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views.generic import TemplateView, View
 serializer_loaded = False
@@ -502,7 +502,7 @@ def ActivateAccount(request, uidb64, token):
     activation link is sent.  If the user clicks on that link this view is accessed.  
     """
     try:
-        uid = force_bytes(urlsafe_base64_decode(uidb64))
+        uid = force_str(urlsafe_base64_decode(uidb64))
         user = User.objects.get(pk=uid)
     except(TypeError, ValueError, OverflowError, User.DoesNotExist):
         user = None
