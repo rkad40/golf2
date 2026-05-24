@@ -19,3 +19,5 @@ diff_proj.bat
 /proj/data/prod-new.db3
 *-temp/
 /proj/data/dump/
+/temp
+/*.code-workspace
