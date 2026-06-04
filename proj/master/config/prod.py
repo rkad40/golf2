@@ -1,6 +1,6 @@
 DEBUG = False
-HTTP_ROOT = 'http://104.200.18.15'
-ALLOWED_HOSTS = ['rockne.golf', 'golf.kadura.net', '104.200.18.15', 'localhost']
+HTTP_ROOT = 'http://rockne.golf'
+ALLOWED_HOSTS = ['rockne.golf', 'www.rockne.golf', 'golf.kadura.net', '104.200.18.15', 'localhost']
 ADMINS = [
    ('Rodney Kadura', 'rkad40@yahoo.com')
 ]
