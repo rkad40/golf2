@@ -318,8 +318,8 @@ SUMMERNOTE_CONFIG = {
         '/static/site/css/summernote.css',
     ),
 
-    # You can completely disable the attachment feature.
-    'disable_attachment': True,
+    # Required when the Summernote toolbar includes the picture button.
+    'disable_attachment': False,
 }
 
 # Crispy forms theme
