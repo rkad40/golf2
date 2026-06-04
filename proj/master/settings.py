@@ -135,6 +135,9 @@ MIDDLEWARE = [
 ]
 
 INTERNAL_IPS = ['127.0.0.1'] # RK Added 2020-11-11 for django-debug-toolbar.
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': 'master.debug.show_debug_toolbar',
+}
 
 ROOT_URLCONF = 'master.urls'
 
