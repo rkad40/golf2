@@ -7,7 +7,11 @@ from .models import Article
 class ArticleAdminForm(ModelForm):
     class Meta:
         widgets = {
-            'intro': SummernoteWidget(),
-            'content': SummernoteWidget(),
+            'intro': SummernoteWidget(attrs={
+                'style': 'width: 100%; max-width: 100%;',
+            }),
+            'content': SummernoteWidget(attrs={
+                'style': 'width: 100%; max-width: 100%;',
+            }),
         }
 
