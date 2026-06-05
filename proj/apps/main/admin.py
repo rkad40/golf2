@@ -1,10 +1,11 @@
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.admin.sites import NotRegistered
 from django.http import HttpResponse
 from .models import Team, TeamAccess, Course, Hole, Tournament, Cache, Award, History, Player
 from .util import update_team_scores
 import csv
 import datetime
+import random
 import ru
 
 from .forms import TournamentAdminForm
@@ -123,9 +124,59 @@ def clear_sortable_scores(modeladmin, request, queryset):
 clear_sortable_scores.short_description = 'Clear sortable scores'
 
 def recalculate_team_scores(modeladmin, request, queryset):
+    ensure_score_cache(request)
     for team in queryset:
         update_team_scores(request, team)
 recalculate_team_scores.short_description = 'Recalculate team scores'
+
+def ensure_score_cache(request):
+    if 'team' not in request.session:
+        request.session['team'] = {}
+    if 'cache' in request.session and 'course' in request.session['cache'] and 'hole' in request.session['cache']:
+        missing_holes = [str(hole) for hole in range(1, 19) if str(hole) not in request.session['cache']['hole']]
+        if len(missing_holes) > 0:
+            raise Exception(f'Course data is missing {ru.join_items(missing_holes)}.')
+        return
+    tournament = Tournament.objects.filter(active=True).first()
+    if tournament is None:
+        raise Exception('No active tournament found.')
+    holes = Hole.objects.filter(course=tournament.course).all()
+    request.session['cache'] = {
+        'course': {'par': tournament.course.par},
+        'hole': {},
+    }
+    for hole in holes:
+        request.session['cache']['hole'][str(hole.hole)] = {
+            'par': hole.par,
+            'handicap': hole.handicap,
+        }
+    missing_holes = [str(hole) for hole in range(1, 19) if str(hole) not in request.session['cache']['hole']]
+    if len(missing_holes) > 0:
+        raise Exception(f'Course data is missing {ru.join_items(missing_holes)}.')
+
+def random_golf_score(par):
+    score_delta = random.choices(
+        [-1, 0, 1, 2, 3],
+        weights=[8, 45, 31, 13, 3],
+        k=1,
+    )[0]
+    return max(1, min(10, par + score_delta))
+
+def add_random_data(modeladmin, request, queryset):
+    ensure_score_cache(request)
+    hole_data = request.session['cache']['hole']
+    team_count = queryset.count()
+    for team in queryset:
+        for hole_int in range(1, 19):
+            par = hole_data[str(hole_int)]['par']
+            setattr(team, f'hole{hole_int}', random_golf_score(par))
+        if team.handicap is None:
+            team.handicap = random.randint(0, 18)
+        if team.start_hole is None:
+            team.start_hole = random.randint(1, 18)
+        update_team_scores(request, team)
+    messages.success(request, f'Random score data added for {team_count} {ru.pluralize("team", team_count)}.')
+add_random_data.short_description = 'Add random data'
 
 def add_random_passwords(modeladmin, request, queryset):
     for team in queryset:
@@ -145,7 +196,7 @@ add_debug_passwords.short_description = 'Add debug passwords'
 class TeamAdmin(admin.ModelAdmin):
     list_display = ['name', 'player1', 'player2', 'player3', 'start_hole', 'handicap', 'password', 'final_adj_raw_score', 'sortable_score', 'active']
     ordering = ['name']
-    actions = [clear_sortable_scores, clear_team_scores, recalculate_team_scores, add_random_passwords, add_debug_passwords, export_to_csv, export_to_json, export_to_yaml]
+    actions = [clear_sortable_scores, clear_team_scores, recalculate_team_scores, add_random_data, add_random_passwords, add_debug_passwords, export_to_csv, export_to_json, export_to_yaml]
     list_editable = ['start_hole', 'handicap', 'active']
 
 @admin.register(TeamAccess)
