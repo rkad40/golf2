@@ -273,6 +273,8 @@ def compile_cache(request):
         for key in ['id', 'course_id', 'gold', 'blue', 'white', 'red']:
             try: del hole[key]
             except: pass
+        if hole['special'] is None:
+            hole['special'] = ''
         data['hole'][num] = dictate(hole)
 
     # Cache team data.

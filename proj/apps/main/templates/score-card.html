@@ -1042,8 +1042,9 @@
 		$('.HoleNumber').text(SelectedHole);
 		// zzz
 
-		if (CourseInfo2[SelectedHoleKey].special.length > 0) {
-			$('#SpecialAwardPlayerSelect .text').html(CourseInfo2[SelectedHoleKey].special);
+		let special = CourseInfo2[SelectedHoleKey].special || '';
+		if (special.length > 0) {
+			$('#SpecialAwardPlayerSelect .text').html(special);
 			$('#SpecialAwardPlayerSelect').slideDown(200);	
 		}
 		else {
