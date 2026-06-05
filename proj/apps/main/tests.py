@@ -980,3 +980,74 @@ class MainTest(TestCase):
         self.assertIn("Ampersand \\u0026 Angle \\u003CName\\u003E", content)
         self.assertNotIn("O'Brien <script>alert(1)</script>", content)
 
+    @override_settings(TESTING=True)
+    def test_026_admin_add_award_data_simulates_special_hole_awards(self):
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        from main.admin import add_award_data
+        from main.models import Award, Hole, Team, Tournament
+
+        Award.objects.all().delete()
+        tournament = Tournament.objects.filter(active=True).first()
+        special_holes = Hole.objects.filter(course=tournament.course).exclude(special__isnull=True).exclude(special__exact='').order_by('hole')
+        expected_award_types = [f'{hole.special} : Hole # {hole.hole}' for hole in special_holes]
+
+        request = self.factory.get('')
+        request.user = self.admin
+        request.session = {'cache': self.cache, 'team': {}}
+        request._messages = FallbackStorage(request)
+
+        queryset = Team.objects.filter(active=True).order_by('name')
+        selected_players = set()
+        for team in queryset:
+            for player in [team.player1, team.player2, team.player3]:
+                if player is not None and len(player.strip()) > 0 and player.strip().upper() != 'TBD':
+                    selected_players.add(player.strip())
+
+        add_award_data(None, request, queryset)
+
+        awards = Award.objects.order_by('award_type', 'created_on').all()
+        self.assertGreaterEqual(awards.count(), len(expected_award_types))
+        self.assertLessEqual(awards.count(), len(expected_award_types) * 5)
+        self.assertEqual(set(Award.objects.values_list('award_type', flat=True)), set(expected_award_types))
+
+        for award_type in expected_award_types:
+            self.assertEqual(Award.objects.filter(award_type=award_type, is_best=True).count(), 1)
+            award_history = Award.objects.filter(award_type=award_type).order_by('created_on')
+            self.assertTrue(award_history.last().is_best)
+            for award in award_history:
+                self.assertIn(award.player, selected_players)
+                self.assertTrue(queryset.filter(pk=award.team_id).exists())
+
+    @override_settings(TESTING=True)
+    def test_027_clear_team_scores_also_clears_team_awards(self):
+        from main.admin import clear_team_scores
+        from main.models import Award, Team
+
+        Award.objects.all().delete()
+        team1 = Team.objects.get(name='01A')
+        team2 = Team.objects.get(name='01B')
+        award_type = 'Longest Drive : Hole # 11'
+        Award.objects.create(
+            award_type=award_type,
+            team=team1,
+            player=team1.player1,
+            created_on=timezone.now() - datetime.timedelta(minutes=10),
+            is_best=False,
+        )
+        Award.objects.create(
+            award_type=award_type,
+            team=team2,
+            player=team2.player1,
+            created_on=timezone.now(),
+            is_best=True,
+        )
+
+        request = self.factory.get('')
+        request.session = {'cache': self.cache, 'team': {}}
+        queryset = Team.objects.filter(name='01B')
+        clear_team_scores(None, request, queryset)
+
+        self.assertFalse(Award.objects.filter(team=team2).exists())
+        remaining_award = Award.objects.get(team=team1)
+        self.assertTrue(remaining_award.is_best)
+

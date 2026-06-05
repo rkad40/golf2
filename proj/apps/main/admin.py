@@ -12,6 +12,7 @@ from .forms import TournamentAdminForm
 from .util import create_random_password
 
 from django_summernote.utils import get_attachment_model
+from django.utils import timezone
 
 try:
     admin.site.unregister(get_attachment_model())
@@ -114,7 +115,18 @@ def clear_team_scores(modeladmin, request, queryset):
         rank=None,
         score_calculated=False,
     )
+    clear_team_awards(queryset)
 clear_team_scores.short_description = 'Clear team scores'
+
+def clear_team_awards(queryset):
+    affected_award_types = set(Award.objects.filter(team__in=queryset).values_list('award_type', flat=True))
+    Award.objects.filter(team__in=queryset).delete()
+    for award_type in affected_award_types:
+        Award.objects.filter(award_type=award_type).update(is_best=False)
+        latest_award = Award.objects.filter(award_type=award_type).order_by('-created_on').first()
+        if latest_award is not None:
+            latest_award.is_best = True
+            latest_award.save()
 
 def clear_sortable_scores(modeladmin, request, queryset):
     queryset.update(
@@ -178,6 +190,51 @@ def add_random_data(modeladmin, request, queryset):
     messages.success(request, f'Random score data added for {team_count} {ru.pluralize("team", team_count)}.')
 add_random_data.short_description = 'Add random data'
 
+def team_player_list(team):
+    players = []
+    for player in [team.player1, team.player2, team.player3]:
+        if player is not None and len(player.strip()) > 0 and player.strip().upper() != 'TBD':
+            players.append(player.strip())
+    return players
+
+def add_award_data(modeladmin, request, queryset):
+    tournament = Tournament.objects.filter(active=True).first()
+    if tournament is None:
+        messages.error(request, 'No active tournament found. Random award data not added.')
+        return
+
+    special_holes = Hole.objects.filter(course=tournament.course).exclude(special__isnull=True).exclude(special__exact='').order_by('hole')
+    if special_holes.count() == 0:
+        messages.error(request, 'No special holes found. Random award data not added.')
+        return
+
+    teams = [team for team in queryset if len(team_player_list(team)) > 0]
+    if len(teams) == 0:
+        messages.error(request, 'No selected teams have player names. Random award data not added.')
+        return
+
+    base_time = tournament.date_time if tournament.date_time is not None else timezone.now()
+    awards_added = 0
+    for hole in special_holes:
+        award_type = f'{hole.special} : Hole # {hole.hole}'
+        shuffled_teams = teams[:]
+        random.shuffle(shuffled_teams)
+        best_count = random.randint(1, min(len(shuffled_teams), 5))
+        for index, team in enumerate(shuffled_teams[:best_count]):
+            Award.objects.filter(award_type=award_type, is_best=True).update(is_best=False)
+            player = random.choice(team_player_list(team))
+            Award.objects.create(
+                award_type=award_type,
+                team=team,
+                player=player,
+                created_on=base_time + datetime.timedelta(minutes=(awards_added * 7) + index),
+                is_best=True,
+            )
+            awards_added += 1
+
+    messages.success(request, f'Random award data added for {awards_added} {ru.pluralize("award", awards_added)}.')
+add_award_data.short_description = 'Add award data'
+
 def add_random_passwords(modeladmin, request, queryset):
     for team in queryset:
         password = create_random_password()
@@ -196,7 +253,7 @@ add_debug_passwords.short_description = 'Add debug passwords'
 class TeamAdmin(admin.ModelAdmin):
     list_display = ['name', 'player1', 'player2', 'player3', 'start_hole', 'handicap', 'password', 'final_adj_raw_score', 'sortable_score', 'active']
     ordering = ['name']
-    actions = [clear_sortable_scores, clear_team_scores, recalculate_team_scores, add_random_data, add_random_passwords, add_debug_passwords, export_to_csv, export_to_json, export_to_yaml]
+    actions = [clear_sortable_scores, clear_team_scores, recalculate_team_scores, add_random_data, add_award_data, add_random_passwords, add_debug_passwords, export_to_csv, export_to_json, export_to_yaml]
     list_editable = ['start_hole', 'handicap', 'active']
 
 @admin.register(TeamAccess)
