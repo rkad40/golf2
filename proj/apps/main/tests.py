@@ -78,6 +78,30 @@ class MainTest(TestCase):
                 row[field] = get_localized_datetime(row[field])
             model.objects.create(**row)
 
+    def score_payload(self, team, score=4, valid=1, enable_write=1):
+        payload = {
+            "IsLoggedIn": 0,
+            "TeamInfo": {
+                "Name": team.name,
+                "Valid": True,
+                "Players": [],
+                "StartHole": team.start_hole,
+                "Handicap": team.handicap,
+                "Score": {},
+            },
+            "EnableWrite": enable_write,
+        }
+        for player in [team.player1, team.player2, team.player3]:
+            if player is not None and len(player) > 0:
+                payload["TeamInfo"]["Players"].append(player)
+        for hole_int in range(1, 19):
+            payload["TeamInfo"]["Score"][str(hole_int)] = {
+                "RawScore": score if valid else None,
+                "RelScore": "",
+                "Valid": valid,
+            }
+        return payload
+
     r'''
      _____         _
     |_   _|__  ___| |_ ___
@@ -264,9 +288,9 @@ class MainTest(TestCase):
         request = self.factory.get('')
         from django.contrib.auth.models import AnonymousUser 
         
-        request.user = AnonymousUser
+        request.user = AnonymousUser()
         self.assertTrue(request.user.is_anonymous)
-        self.assertTrue(request.user.is_authenticated)
+        self.assertFalse(request.user.is_authenticated)
         self.assertFalse(request.user.is_staff)
 
         request.user = self.admin
@@ -793,4 +817,166 @@ class MainTest(TestCase):
 
         # response = client.post('/team/login', dict(team='01A', password='tee247'), follow=True)
 
+
+    @override_settings(TESTING=True)
+    def test_019_middleware_cache_rebuild_and_repair(self):
+        from main.models import Cache
+        client = Client()
+
+        Cache.objects.all().delete()
+        response = client.get('/home')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Cache.objects.count(), 1)
+        self.assertIn('team', json.loads(Cache.objects.first().data))
+
+        cache = Cache.objects.first()
+        cache.data = '{bad json'
+        cache.save()
+        response = client.get('/home')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn('hole', json.loads(Cache.objects.first().data))
+
+    @override_settings(TESTING=True)
+    def test_020_middleware_uses_team_fields_when_cache_team_is_stale(self):
+        from main.models import Cache
+        client = Client()
+        client.post('/team/login', dict(team='01A', password='tee247'), follow=True)
+
+        cache = Cache.objects.first()
+        data = json.loads(cache.data)
+        del data['team']['01A']
+        cache.data = json.dumps(data)
+        cache.save()
+
+        response = client.get('/player/select')
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode()
+        self.assertIn('Kenny Hoffman', content)
+        self.assertIn('Joe Hoffman', content)
+        self.assertIn('Robyn Hoffman', content)
+
+    @override_settings(TESTING=True)
+    def test_021_ajax_update_scores_returns_json_for_bad_requests(self):
+        from main.models import Team, Tournament
+        client = Client()
+
+        response = client.get('/team/scorecard/update')
+        data = json.loads(response.content.decode())
+        self.assertFalse(data['valid'])
+        self.assertEqual(data['error'], 'Invalid request.')
+
+        response = client.post('/team/scorecard/update', {})
+        data = json.loads(response.content.decode())
+        self.assertFalse(data['valid'])
+        self.assertIn('Invalid scorecard request', data['error'])
+
+        client.post('/team/login', dict(team='01A', password='tee247'), follow=True)
+        response = client.post('/team/scorecard/update', {'Data': '{bad json'})
+        data = json.loads(response.content.decode())
+        self.assertFalse(data['valid'])
+        self.assertIn('Invalid scorecard request', data['error'])
+
+        Tournament.objects.update(active=False)
+        team = Team.objects.get(name='01A')
+        response = client.post('/team/scorecard/update', {
+            'Data': json.dumps(self.score_payload(team)),
+        })
+        data = json.loads(response.content.decode())
+        self.assertFalse(data['valid'])
+        self.assertEqual(data['error'], 'No active tournament found.')
+
+    @override_settings(TESTING=True)
+    def test_022_scorecard_clear_score_removes_existing_database_score(self):
+        from main.models import Team
+        client = Client()
+        client.post('/team/login', dict(team='01A', password='tee247'), follow=True)
+        team = Team.objects.get(name='01A')
+
+        response = client.post('/team/scorecard/update', {
+            'Data': json.dumps(self.score_payload(team, score=4, valid=1)),
+        })
+        data = json.loads(response.content.decode())
+        self.assertTrue(data['writeOccurred'])
+        team.refresh_from_db()
+        self.assertEqual(team.holes_played, 18)
+        self.assertEqual(team.hole1, 4)
+
+        payload = self.score_payload(team, score=4, valid=1)
+        payload['TeamInfo']['Score']['1'] = {
+            'RawScore': None,
+            'RelScore': '',
+            'Valid': 0,
+        }
+        response = client.post('/team/scorecard/update', {
+            'Data': json.dumps(payload),
+        })
+        data = json.loads(response.content.decode())
+        self.assertTrue(data['writeOccurred'])
+        team.refresh_from_db()
+        self.assertIsNone(team.hole1)
+        self.assertEqual(team.holes_played, 17)
+        self.assertFalse(team.score_calculated)
+
+    @override_settings(TESTING=True)
+    def test_023_admin_add_random_data_populates_valid_full_rounds(self):
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        from main.admin import add_random_data
+        from main.models import Team
+
+        request = self.factory.get('')
+        request.user = self.admin
+        request.session = {'cache': self.cache, 'team': {}}
+        request._messages = FallbackStorage(request)
+
+        queryset = Team.objects.filter(name__in=['01A', '01B']).order_by('name')
+        add_random_data(None, request, queryset)
+
+        for team in queryset:
+            team.refresh_from_db()
+            self.assertEqual(team.holes_played, 18)
+            self.assertTrue(team.score_calculated)
+            self.assertNotEqual(team.sortable_score, '')
+            for hole_int in range(1, 19):
+                score = getattr(team, f'hole{hole_int}')
+                self.assertIsNotNone(score)
+                self.assertGreaterEqual(score, 1)
+                self.assertLessEqual(score, 10)
+
+    @override_settings(TESTING=True)
+    def test_024_compile_cache_normalizes_empty_hole_specials(self):
+        from django.contrib.messages.storage.fallback import FallbackStorage
+        from main.models import Cache, Hole
+        from main.util import compile_cache
+
+        Hole.objects.filter(hole=1).update(special=None)
+        request = self.factory.get('')
+        request.session = {}
+        request._messages = FallbackStorage(request)
+        compile_cache(request)
+
+        data = json.loads(Cache.objects.first().data)
+        self.assertEqual(data['hole']['1']['special'], '')
+
+    @override_settings(TESTING=True)
+    def test_025_scorecard_template_escapes_team_data_in_javascript(self):
+        from main.models import Team
+        from main.views import ScoreCard
+
+        team = Team.objects.get(name='01A')
+        team.player1 = "O'Brien <script>alert(1)</script>"
+        team.player2 = 'Ampersand & Angle <Name>'
+        team.player3 = None
+        team.save()
+
+        request = self.factory.get('')
+        request.user = self.admin
+        request.session = {'cache': self.cache, 'team': {'id': team.id}}
+        response = ScoreCard(request)
+        content = response.content.decode()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("O\\u0027Brien", content)
+        self.assertIn("\\u003Cscript\\u003Ealert(1)\\u003C/script\\u003E", content)
+        self.assertIn("Ampersand \\u0026 Angle \\u003CName\\u003E", content)
+        self.assertNotIn("O'Brien <script>alert(1)</script>", content)
 

@@ -476,25 +476,35 @@ def AjaxUpdateScores(request):
         post_data = dict(valid=False, error='Invalid request.')
         return JsonResponse(post_data)
     # Get POST post_data 
-    post_data = request.POST.dict()
-    post_data = json.loads(post_data['Data'])
+    try:
+        post_data = request.POST.dict()
+        post_data = json.loads(post_data['Data'])
+        team_session = request.session['team']
+        site_team_name = team_session['name']
+        team_id = team_session['id']
+        data_team_name = post_data['TeamInfo']['Name']
+    except Exception:
+        return JsonResponse(dict(valid=False, error='Invalid scorecard request. Please refresh the page and try again.'))
     notes = []
     warnings = []
-    tournament = Tournament.objects.filter(active=True)[0]
+    tournament = Tournament.objects.filter(active=True).first()
+    if tournament is None:
+        return JsonResponse(dict(valid=False, error='No active tournament found.'))
     can_write = request.user.is_authenticated or (tournament.enable_team_access and tournament.enable_team_input)
-    enable_write = bool(post_data['EnableWrite'])
+    enable_write = post_data.get('EnableWrite', 0)
+    if isinstance(enable_write, str):
+        enable_write = enable_write.lower() in ['1', 'true', 'yes']
+    else:
+        enable_write = bool(enable_write)
     if enable_write and not can_write:
         enable_write = False
         warnings.append('Data not saved.  Write access to team scorecard data is not currently enabled.')
-    data_team_name = post_data['TeamInfo']['Name']
-    site_team_name = request.session['team']['name']
     if data_team_name != site_team_name:
         send_error_data = dict(
             valid=False,
             error=f"""You submitted data for team "{data_team_name}". But your credentials identify you as belonging to team "{site_team_name}".  Data not saved."""
         )
         return JsonResponse(send_error_data)
-    team_id = request.session['team']['id']
     team = Team.objects.get(pk=team_id)
     write_occurred = False
     if 'Award' in post_data: 

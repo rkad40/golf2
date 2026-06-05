@@ -28,6 +28,8 @@ from pathlib import Path
 import platform
 from lib import whisper
 
+IS_RUNNING_TESTS = 'test' in sys.argv
+
 r"""
  ____  _                            ____                           _
 |  _ \(_) __ _ _ __   __ _  ___    / ___| ___ _ __   ___ _ __ __ _| |
@@ -95,7 +97,6 @@ INSTALLED_APPS = [
     'django.contrib.admindocs', # RK Added 2020-11-20. Needed for Django admin documentation generator.
     ## Modules and plugins
     'crispy_forms', # RK Added 2020-11-11
-    'debug_toolbar', # RK Added 2020-11-11
     'easy_thumbnails', # RK Added 2020-11-11
 	'django_summernote', # RK Added 2020-11-23
 	'colorfield', # RK Added 2020-11-23
@@ -105,6 +106,9 @@ INSTALLED_APPS = [
 	'book.apps.BookConfig',
 	'maven.apps.MavenConfig',
 ]
+
+if not IS_RUNNING_TESTS:
+    INSTALLED_APPS.append('debug_toolbar') # RK Added 2020-11-11
 
 r"""
  ____  _                           ____  _ _
@@ -129,10 +133,12 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-	'debug_toolbar.middleware.DebugToolbarMiddleware',  # RK Added 2020-11-11. Needed for django-debug-toolbar
     'django.contrib.admindocs.middleware.XViewMiddleware', # RK Added 2020-11-20. Optional for Django admin documentation generator.
     'master.middleware.team_access.TeamAccessMiddleware',
 ]
+
+if not IS_RUNNING_TESTS:
+    MIDDLEWARE.insert(-2, 'debug_toolbar.middleware.DebugToolbarMiddleware')  # RK Added 2020-11-11. Needed for django-debug-toolbar
 
 INTERNAL_IPS = ['127.0.0.1'] # RK Added 2020-11-11 for django-debug-toolbar.
 DEBUG_TOOLBAR_CONFIG = {

@@ -432,16 +432,16 @@
 	var CourseInfo2 = {{ request.session.cache.hole|json|safe }};
 
 	var TeamInfo = {
-		Name: "{{ team.name|safe }}",
+		Name: "{{ team.name|escapejs }}",
 		Valid: true,
 		Players: 
 		[
-			"{{ team.player1|safe }}",
-			"{{ team.player2|safe }}",
-			"{{ team.player3|safe }}",
+			"{{ team.player1|default_if_none:''|escapejs }}",
+			"{{ team.player2|default_if_none:''|escapejs }}",
+			"{{ team.player3|default_if_none:''|escapejs }}",
 		],
 		StartHole: {{ team.start_hole }},
-		Handicap: {{ team.str_handicap|safe }},
+		Handicap: {{ team.str_handicap }},
 		Score:
 		{
 			 1: {RawScore: {% if team.hole1  %}{{ team.hole1  }}{% else %}null{% endif %}, RelScore:  "", Valid: 0},
@@ -1214,6 +1214,8 @@
 		if (RawScore == 0) {
 			RelScoreString = ''
 			$("#HoleStatus"+SelectedHole).removeClass("Active");
+			TeamInfo['Score'][SelectedHole]['Valid'] = 0;
+			TeamInfo['Score'][SelectedHole]['RawScore'] = null;
 		}
 		else {
 			RelScore = EnteredScore - Par;
@@ -1222,9 +1224,9 @@
 			{
 				RelScoreString = "+" + RelScoreString;
 			}
+			TeamInfo['Score'][SelectedHole]['Valid'] = 1;
+			TeamInfo['Score'][SelectedHole]['RawScore'] = RawScore;
 		}
-		TeamInfo['Score'][SelectedHole]['Valid'] = 1;
-		TeamInfo['Score'][SelectedHole]['RawScore'] = RawScore;
 		TeamInfo['Score'][SelectedHole]['RelScore'] = RelScoreString;
 		SelectHole(SelectedHole);
 		PopulateScores();
@@ -1354,9 +1356,9 @@
 		let HTML = [];
 		HTML.push(`<div id="SelectAnotherTeamValue" style="display: none;"></div>`);
 		{% for team_name,team in request.session.cache.team|sortkeys %}
-		HTML.push(`<a class="btn btn-outline-secondary" href="javascript:$('#SelectAnotherTeamValue').html('{{ team_name }}');" style="width: 100%; margin-bottom: 2px; text-align: left;">`);
-		HTML.push(`<div style="font-weight: bold;">Team {{ team_name }}</div>`);
-		HTML.push(`<div style="font-size: 12px; line-height: 12px;">{{ team.player1 }}<br>{{ team.player2 }}<br>{{ team.player3 }}</div>`);
+		HTML.push(`<a class="btn btn-outline-secondary" href="javascript:$('#SelectAnotherTeamValue').html('{{ team_name|escapejs }}');" style="width: 100%; margin-bottom: 2px; text-align: left;">`);
+		HTML.push(`<div style="font-weight: bold;">Team {{ team_name|escape|escapejs }}</div>`);
+		HTML.push(`<div style="font-size: 12px; line-height: 12px;">{{ team.player1|default_if_none:''|escape|escapejs }}<br>{{ team.player2|default_if_none:''|escape|escapejs }}<br>{{ team.player3|default_if_none:''|escape|escapejs }}</div>`);
 		HTML.push(`</a>`)
 		{% endfor %}
 		let html = HTML.join('\n');
@@ -1428,15 +1430,15 @@
 			`<input type="hidden" id="SpecialAwardPlayerName">`,
 			`<p>Did one of the players on your team get <strong>${awardLong}</strong>?  If so, click the player's name and then hit <strong>Enter</strong>:</p>`,
 			{% if team.player1|length > 0 %}
-			`<a class="btn btn-outline-secondary" style="width: 100%; margin-bottom: 2px; text-align: left;" href="javascript:$('#SpecialAwardPlayerName').val('{{ team.player1 }}')">{{ team.player1 }}</a>`,
+			`<a class="btn btn-outline-secondary" style="width: 100%; margin-bottom: 2px; text-align: left;" href="javascript:$('#SpecialAwardPlayerName').val('{{ team.player1|escapejs }}')">{{ team.player1|escape|escapejs }}</a>`,
 			{% endif %}
 
 			{% if team.player2|length > 0 %}
-			`<a class="btn btn-outline-secondary" style="width: 100%; margin-bottom: 2px; text-align: left;" href="javascript:$('#SpecialAwardPlayerName').val('{{ team.player2 }}')">{{ team.player2 }}</a>`,
+			`<a class="btn btn-outline-secondary" style="width: 100%; margin-bottom: 2px; text-align: left;" href="javascript:$('#SpecialAwardPlayerName').val('{{ team.player2|escapejs }}')">{{ team.player2|escape|escapejs }}</a>`,
 			{% endif %}
 			
 			{% if team.player3|length > 0 %}
-			`<a class="btn btn-outline-secondary" style="width: 100%; margin-bottom: 2px; text-align: left;" href="javascript:$('#SpecialAwardPlayerName').val('{{ team.player3 }}')">{{ team.player3 }}</a>`,
+			`<a class="btn btn-outline-secondary" style="width: 100%; margin-bottom: 2px; text-align: left;" href="javascript:$('#SpecialAwardPlayerName').val('{{ team.player3|escapejs }}')">{{ team.player3|escape|escapejs }}</a>`,
 			{% endif %}
 		];
 		let d = new Dialog();
@@ -1449,7 +1451,7 @@
 				{Name: 'Enter', Function: function() {
 					$Site.Data['Award'] = {
 						AwardType: awardLong,
-						Team: '{{ team.name }}',
+						Team: '{{ team.name|escapejs }}',
 						Player: $('#SpecialAwardPlayerName').val(),
 					};
 					ExecuteAjaxTransaction(1);

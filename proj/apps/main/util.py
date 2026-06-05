@@ -584,27 +584,14 @@ def update_team_scores(request, team, data=None, write=True):
     team.final_adj_rel_score = 0
     team.sortable_score = ''
     team.rank = 0
+    team.score_calculated = False
 
     if data is not None:
         # Update team score data from scorecard input data.
-        if bool(data["TeamInfo"]["Score"]["1"]["Valid"]): team.hole1 = data["TeamInfo"]["Score"]["1"]["RawScore"]
-        if bool(data["TeamInfo"]["Score"]["2"]["Valid"]): team.hole2 = data["TeamInfo"]["Score"]["2"]["RawScore"]
-        if bool(data["TeamInfo"]["Score"]["3"]["Valid"]): team.hole3 = data["TeamInfo"]["Score"]["3"]["RawScore"]
-        if bool(data["TeamInfo"]["Score"]["4"]["Valid"]): team.hole4 = data["TeamInfo"]["Score"]["4"]["RawScore"]
-        if bool(data["TeamInfo"]["Score"]["5"]["Valid"]): team.hole5 = data["TeamInfo"]["Score"]["5"]["RawScore"]
-        if bool(data["TeamInfo"]["Score"]["6"]["Valid"]): team.hole6 = data["TeamInfo"]["Score"]["6"]["RawScore"]
-        if bool(data["TeamInfo"]["Score"]["7"]["Valid"]): team.hole7 = data["TeamInfo"]["Score"]["7"]["RawScore"]
-        if bool(data["TeamInfo"]["Score"]["8"]["Valid"]): team.hole8 = data["TeamInfo"]["Score"]["8"]["RawScore"]
-        if bool(data["TeamInfo"]["Score"]["9"]["Valid"]): team.hole9 = data["TeamInfo"]["Score"]["9"]["RawScore"]
-        if bool(data["TeamInfo"]["Score"]["10"]["Valid"]): team.hole10 = data["TeamInfo"]["Score"]["10"]["RawScore"]
-        if bool(data["TeamInfo"]["Score"]["11"]["Valid"]): team.hole11 = data["TeamInfo"]["Score"]["11"]["RawScore"]
-        if bool(data["TeamInfo"]["Score"]["12"]["Valid"]): team.hole12 = data["TeamInfo"]["Score"]["12"]["RawScore"]
-        if bool(data["TeamInfo"]["Score"]["13"]["Valid"]): team.hole13 = data["TeamInfo"]["Score"]["13"]["RawScore"]
-        if bool(data["TeamInfo"]["Score"]["14"]["Valid"]): team.hole14 = data["TeamInfo"]["Score"]["14"]["RawScore"]
-        if bool(data["TeamInfo"]["Score"]["15"]["Valid"]): team.hole15 = data["TeamInfo"]["Score"]["15"]["RawScore"]
-        if bool(data["TeamInfo"]["Score"]["16"]["Valid"]): team.hole16 = data["TeamInfo"]["Score"]["16"]["RawScore"]
-        if bool(data["TeamInfo"]["Score"]["17"]["Valid"]): team.hole17 = data["TeamInfo"]["Score"]["17"]["RawScore"]
-        if bool(data["TeamInfo"]["Score"]["18"]["Valid"]): team.hole18 = data["TeamInfo"]["Score"]["18"]["RawScore"]
+        for hole_int in range(1, 19):
+            hole_score = data["TeamInfo"]["Score"].get(str(hole_int), {})
+            raw_score = hole_score.get("RawScore") if bool(hole_score.get("Valid")) else None
+            setattr(team, f'hole{hole_int}', raw_score)
     else:
         # If `data` is None, then the function is being called from the admin, meaning data is not 
         # being sourced from the scorecard so be sure and call `calculate_team_handicap_per_hole()`

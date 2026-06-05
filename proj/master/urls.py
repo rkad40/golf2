@@ -15,7 +15,7 @@ urlpatterns = [
     path('summernote/', include('django_summernote.urls')),
     path('admin/', admin.site.urls),
 ]
-if settings.DEBUG: # pragma: no cover
+if settings.DEBUG and not settings.IS_RUNNING_TESTS: # pragma: no cover
     import debug_toolbar
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns = [path('__debug__/', include(debug_toolbar.urls)),] + urlpatterns
